@@ -4,7 +4,7 @@ div.item {
     text-align: center;
     width: 240px;
 }
-img {
+img.frontpage {
     width: 200px;
     height: 200px;
     background-color: grey;
