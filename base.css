@@ -79,6 +79,7 @@ img.banner {
     font-weight: 400;
     font-style: normal;
 }
+
 /*Project table*/
 .projtable {
     margin-left: auto;
@@ -138,6 +139,7 @@ a:active {
     font-family: "Merriweather", serif;
     font-weight: 400;
     font-style: normal;
+    z-index:3;
 }
 
     /* Links inside the navbar */
@@ -146,7 +148,7 @@ a:active {
         display: inline-block;
         color: #f2f2f2;
         text-align: center;
-        padding: 14px 16px;
+        padding: 20px 16px;
         text-decoration: none;
     }
 
@@ -155,4 +157,36 @@ a:active {
         background: #ddd;
         color: black;
     }
+
+/* Fading in a screenshot over a project preview image */
+.container {
+    position: relative;
+    display: inline-block;
+    text-align: center;
+}
+
+.image {
+    display: block;
+    width: 350px;
+    height: 250px;
+    margin: 0 auto;
+}
+
+.overlay {
+    opacity: 0;
+    transition: .3s ease;
+}
+
+.container:hover .overlay {
+    opacity: 1;
+}
+
+.fadeimg {
+    position: absolute;
+    width: 350px;
+    height: 250px;
+    top: 0%;
+    left: 0%;
+    text-align: center;
+}
 
