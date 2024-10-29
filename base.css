@@ -5,28 +5,41 @@ div.item { /* Table items for project display*/
     vertical-align: top;
     display: inline-block;
     text-align: center;
-    width: 240px;
+    width: 380px;
+    height: 400px;
     transition: 0.2s;
     padding: 8px 16px;
+    border-radius: 25px;
+    border: 2px solid #0004b4;
 }
 
-    div.item h3 {
+    div.item h1 {
         font-family: "Merriweather", serif;
         font-weight: 400;
         font-style: normal;
+    }
+
+    div.item img {
+        width: 350px;
+        height: 250px;
+        border-radius: 15px;
+        display: block;
+        margin: 0 auto;
+        border: 3px solid #0004b4;
     }
 
     div.item:hover {
         background-color: #0004b4;
     }
 
-img.frontpage { 
-    width: 200px;
-    height: 200px;
-    background-color: grey;
-}
+    div.item img:hover {
+        border: 3px solid white;
+    }
+
 .caption {
     display: block;
+    text-align: center;
+    padding: -5px 0px 0px 0px;
 }
 
 /* Centered header images */
@@ -43,6 +56,8 @@ img.titlecard {
     font-family: "Questrial", sans-serif; /* Default font is sans serif */
     font-weight: 400;
     font-style: normal;
+    color: white;
+    background-color: #000355;
 }
 
 .merriweather {
@@ -55,6 +70,10 @@ img.titlecard {
     margin-left: auto;
     margin-right: auto;
 }
+
+    .projtable td {
+        vertical-align: middle;
+    }
 
 /*Link colors*/
 a:link {
