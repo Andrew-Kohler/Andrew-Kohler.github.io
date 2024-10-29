@@ -39,7 +39,14 @@ div.item { /* Table items for project display*/
 .caption {
     display: block;
     text-align: center;
-    padding: -5px 0px 0px 0px;
+    margin: 10px 0px -5px 0px;
+}
+
+.descriptors {
+    display: block;
+    text-align: center;
+    font-size: 16px;
+    margin: 7px 0px -5px 0px;
 }
 
 /* Centered header images */
@@ -47,7 +54,14 @@ img.titlecard {
     display: block;
     margin-left: auto;
     margin-right: auto;
-    width: 50%;
+    
+}
+
+img.banner {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
 }
 
 /* Main content - margin for navbar */
