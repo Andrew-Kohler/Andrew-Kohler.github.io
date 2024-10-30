@@ -1,0 +1,68 @@
+
+
+/* Text title */
+.projtitle {
+    font-family: "Merriweather", serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 74px;
+}
+
+/*Title bumpers*/
+img.bumper {
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 174px;
+    height: 54px;
+}
+
+/*Title table*/
+.titletable {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: -15px;
+    margin-bottom: -55px;
+}
+
+    .titletable td {
+        vertical-align: middle;
+        padding: 0px 15px;
+    }
+
+
+/* Section 2*/
+.majordetailtitle {
+    font-family: "Merriweather", serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 24px;
+    margin-bottom: -15px;
+}
+
+.majordetail {
+    font-style: normal;
+    font-size: 20px;
+}
+
+.leftmajor {
+    
+}
+
+.majorcontenttable {
+    margin-left: auto;
+    margin-right: auto;
+    width:80%;
+}
+
+    .left {
+        vertical-align: middle;
+        width: 30%;
+       /* border: 3px solid white;*/
+    }
+
+    .right {
+        vertical-align: middle;
+        width: 50%;
+        /*border: 3px solid white;*/
+    }
