@@ -30,39 +30,119 @@ img.bumper {
         padding: 0px 15px;
     }
 
+.modaltable {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.titletable td {
+    vertical-align: middle;
+}
+
 
 /* Section 2*/
-.majordetailtitle {
-    font-family: "Merriweather", serif;
-    font-weight: 400;
-    font-style: normal;
-    font-size: 24px;
-    margin-bottom: -15px;
-}
-
-.majordetail {
-    font-style: normal;
-    font-size: 20px;
-}
-
-.leftmajor {
-    
-}
-
 .majorcontenttable {
     margin-left: auto;
     margin-right: auto;
     width:80%;
 }
 
-    .left {
-        vertical-align: middle;
-        width: 30%;
-       /* border: 3px solid white;*/
+    .majorcontenttable h4 {
+        font-family: "Merriweather", serif;
+        font-weight: 400;
+        font-style: normal;
+        font-size: 24px;
+        margin-bottom: -15px;
     }
 
-    .right {
-        vertical-align: middle;
-        width: 50%;
-        /*border: 3px solid white;*/
+    .majorcontenttable li {
+        font-style: normal;
+        font-size: 20px;
     }
+
+.left {
+    vertical-align: middle;
+    width: 30%;
+    background-color: #00058d;
+    border-radius: 15px;
+    margin: 0px 5px 0px 5px;
+    padding: 0px 10px;
+    border: 3px solid red;
+}
+
+.right {
+    vertical-align: middle;
+    width: 50%;
+    margin: 0px 5px 0px 5px;
+    padding: 0px 10px;
+    text-align:center;
+    /*border: 3px solid white;*/
+}
+
+/*For the "About the Project" text*/
+.about {
+
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    border-radius: 15px;
+    border: 6px solid #00058d;
+}
+
+.about p{
+    padding: 0px 70px;
+    font-size: 20px;
+    line-height: 1.3;
+    text-align:left;
+}
+
+/* Accomplishments table*/
+.accomplishtable {
+    padding: 25px 0px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+}
+
+    .accomplishtable td {
+        width: 50%;
+        border-radius: 10px;
+        border: 6px solid #00058d;
+    }
+
+    .accomplishtable li{
+        font-size:24px;
+        padding: 5px 0px;
+    }
+
+/* Next table*/
+.nexttable {
+
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.nexttable td{
+    width:100px;
+    text-align:center;
+}
+
+.buttonc {
+    transition: 0.2s;
+    width: 140px;
+    height: 70px;
+    border-radius: 15px;
+    border: 2px solid #0004b4;
+
+}
+
+    .buttonc:hover {
+        background-color: #0004b4;
+    }
+
+    .buttonc h3 {
+        margin-top: 25px;
+    }
+
+
+
