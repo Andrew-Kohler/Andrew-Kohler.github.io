@@ -32,7 +32,13 @@
     margin: auto;
     display: block;
     width: 70%;
-    max-width: 700px;
+    max-width: 1300px;
+}
+
+/* Table for modal and arrows */
+.modal-table {
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* Caption of Modal Image */
@@ -100,3 +106,12 @@
         width: 100%;
     }
 }
+
+/*Arrows*/
+.nav-arrow {
+    transition: 0.3s;
+}
+
+    .nav-arrow:hover {
+        opacity: .7;
+    }
