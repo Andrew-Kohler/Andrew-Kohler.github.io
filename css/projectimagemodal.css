@@ -19,7 +19,18 @@
     height: 338px;
 }
 
-    .myImg:hover {
+    .myImgLarge:hover {
+        opacity: 0.7;
+    }
+
+.myImgLargest {
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+    height: 650px;
+}
+
+    .myImgLargest:hover {
         opacity: 0.7;
     }
 
