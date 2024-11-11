@@ -12,6 +12,17 @@
         opacity: 0.7;
     }
 
+.myImgLarge {
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+    height: 338px;
+}
+
+    .myImg:hover {
+        opacity: 0.7;
+    }
+
 /* The Modal (background) */
 .modal {
     display: none; /* Hidden by default */
