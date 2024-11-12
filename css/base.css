@@ -198,3 +198,52 @@ a:active {
     font-style: normal;
     font-size: 64px;
 }
+
+/* The project cards for all projects*/
+div.item-two { /* Table items for project display*/
+    vertical-align: top;
+    display: inline-block;
+    text-align: center;
+    width: 342px;
+    height: 360px;
+    transition: 0.2s;
+    padding: 8px 12px;
+    border-radius: 15px;
+    border: 2px solid #0004b4;
+}
+
+    div.item-two h1 {
+        font-family: "Merriweather", serif;
+        font-weight: 400;
+        font-style: normal;
+    }
+
+    div.item-two img {
+        width: 315px;
+        height: 225px;
+        border-radius: 15px;
+        display: block;
+        margin: 0 auto;
+        border: 3px solid #0004b4;
+    }
+
+    div.item-two:hover {
+        background-color: #0004b4;
+    }
+
+    div.item-two img:hover {
+        border: 3px solid white;
+    }
+
+.caption {
+    display: block;
+    text-align: center;
+    margin: 10px 0px -5px 0px;
+}
+
+.descriptors {
+    display: block;
+    text-align: center;
+    font-size: 16px;
+    margin: 7px 0px -5px 0px;
+}
