@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Raytracer | Andrew Kohler</title>
+    <title>By Bait or By Bullet | Andrew Kohler</title>
     <link rel="icon" type="image/x-icon" href="../images/logotransp.png">
 
     <link rel="stylesheet" href="../css/base.css">
@@ -33,14 +33,14 @@
                 <img class="bumper" src="../images/bufferl.png" alt="Left title bumper.">
             </td>
             <td>
-                <h1 class="projtitle" style="text-align:center">Raytracer</h1>
+                <h1 class="projtitle" style="text-align:center">By Bait or By Bullet</h1>
             </td>
             <td>
                 <img class="bumper" src="../images/bufferr.png" alt="Right title bumper.">
             </td>
         </tr>
     </table>
-    <h3 class="merriweather" style="text-align:center"><b>Development span: </b>January - February 2022 (~2 weeks)</h3>
+    <h3 class="merriweather" style="text-align:center"><b>Development span: </b>August - December 2024 (4 months)</h3>
 
     <!--High-value intel-->
 
@@ -51,22 +51,25 @@
                 <div>
                     <h4 style="margin-top: 5px;"><u>Project Type</u></h4>
                     <ul>
-                        <li>Individual</li>
+                        <li>Collaborative - 20+ Person Team</li>
                     </ul>
 
                     <h4><u>My Roles</u></h4>
                     <ul>
-                        <li>Programmer</li>
+                        <li>Engineering Lead</li>
                     </ul>
 
                     <h4><u>Source Code</u></h4>
                     <ul>
-                        <li><u><a href="https://github.com/Andrew-Kohler/CompGraphicsRaytracerP1" target="_blank">GitHub</a></u></li>
+                        <li><u><a href="https://github.com/julianjriley/ByHookOrByCrook" target="_blank">GitHub</a></u></li>
                     </ul>
-
+                    <h4><u>Steam Page</u></h4>
+                    <ul>
+                        <li><u><a href="https://store.steampowered.com/app/3472840/By_Bait_or_By_Bullet/" target="_blank">Free to play!</a></u></li>
+                    </ul>
                     <h4><u>Made For</u></h4>
                     <ul>
-                        <li>CAP 4730 Computational Structures in Computer Graphics  (UF)</li>
+                        <li>DIG4527C Game Design and Production (UF)</li>
                     </ul>
 
                 </div>
@@ -74,12 +77,12 @@
 
             <td class="right">
                 <iframe width="600" height="338"
-                        src="https://www.youtube.com/embed/ycUzlV4kj4Q?si=B39wAparDKwBQ29A" allowfullscreen>
+                        src="https://www.youtube.com/embed/b7iAK-zqY3Q?si=d9NCUKNEI-GTBSr3" allowfullscreen>
                 </iframe>
                 <table class="modaltable">
                     <tr>
                         <td>
-                            <img class="myImg" src="../images/raytrace/screen1.jpg" alt="The first frame of the movie, which shows off several implemented features (specular highlights on the eyes, diffuse shading on the body, glazed ice)" style="width:100%;max-width:300px">
+                            <img class="myImg" src="../images/baitorbullet/screen1.png" alt="The red exclamation points by a NPC's 'cryer' dialogue indicate that they'll say something you haven't seen on your current save file." style="width:100%;max-width:300px">
                             <!-- Modal -->
                             <div id="myModal" class="modal">
                                 <span class="close">&times;</span>
@@ -100,11 +103,12 @@
                             </div>
                         </td>
                         <td>
-                            <img class="myImg" src="../images/raytrace/screen2.jpg" alt="A better view of the tetrahedron of ice in the scene, implemented as its own object type using Triangles." style="width:100%;max-width:300px">
+                            <img class="myImg" src="../images/baitorbullet/screen2.png" alt="Here, Rod Girl is reacting to the player having been defeated once by the third boss. Conversations are sorted into categories and priority values behind
+                                 the scenes to make NPCs feel aware of what's going on, and even develop as characters, throughout the game." style="width:100%;max-width:300px">
 
                         </td>
                         <td>
-                            <img class="myImg" src="../images/raytrace/screen3.png" alt="A clear view of my implementation of a glazed surface that is highly reflective." style="width:100%;max-width:300px">
+                            <img class="myImg" src="../images/baitorbullet/screen3.png" alt="Shops use the same visual language for interaction as NPCs for ease of player understanding, and alter player data to give them permanent upgrades!">
 
                         </td>
                     </tr>
@@ -121,14 +125,19 @@
     <div class="about">
         <h2 class="merriweather" style="text-align:center"><u>About the Project</u></h2>
         <p>
-            The first project in UF's computer graphics course is to program a raytracing application purely in C++ (with OpenGL being used only to display the final result). Over the course
-            of this project, I created programatic structures that implemented mathematical representations of rays, points, various surfaces like spheres and tris, and lights, and implemented the equations
-            that allow all of those things to interact with each other and correctly render in a perspective or orthographic view based on the position of a camera object I created. 
-
+            <i>By Bait or By Bullet</i> is a fishing game / shoot 'em up / boss rush roguelite, and if all of that isn't exciting enough, it was the largest development team I had been a part of up to this point;
+            DIG4527C, the course it was made for at UF, is structured to let the entire class - over 20 people - act as a single studio. I was one of two engineering leads responsible for
+            managing an 8-person programming team, coordinating with other teams to implement features and update goals, conducting thorough code reviews, and helping to lead full team meetings and presentations. It was wonderful
+            to help lead such a passionate team, and what I learned from the role has been my greatest takeaway from the project.
         </p>
         <p>
-            I also implemented backface culling for my triangles,
-            both for debugging purposes and to create a more complete project, and added some object animation to my final video render (the snowman watches you!).
+            As a programmer, I was soley responsible for the implementation of all features in our 2D town-down hub world: movement, NPC interactions, shop interactions, and associated interfaces.
+            I also implemented all of our cutscene functionality, and assisted with projectile implementation in the boss arenas, as well as game-wide polish.
+        </p>
+        <p>
+            The NPC dialogue system is one of the most extensive game systems I've ever made. NPC conversations have different priorities and trigger events; they'll respond to you
+            purchasing an item, defeating a boss, or losing to the same boss multiple times, as well as hold different conversations with you each time you return to the hub. The writers
+            on this project (myself included) were excited to truly flex their narrative muscles on a large-scale project, so I obliged them with a system that could support our creativity.
         </p>
     </div>
 
@@ -138,15 +147,14 @@
     <table class="modaltable">
         <tr>
             <td>
-                <img class="myImg" src="../images/raytrace/screen4.png" alt="This is a progress screenshot I took; it was the first time I successfully casted light onto an object." style="width:100%;max-width:300px">
-                
-            </td>
-            <td>
-                <img class="myImg" src="../images/raytrace/screen5.png" alt="This is another progress screenshot; it was my first successful triangle. Surface normals will get you every time!" style="width:100%;max-width:300px">
+                <img class="myImg" src="../images/baitorbullet/screen4.png" alt="Instead of chests or enemy kills, you get your loadout in By Bait or By Bullet by fishing it up! There are strange creatures beyond reality..." style="width:100%;max-width:300px">
 
             </td>
             <td>
-                <img class="myImg" src="../images/raytrace/screen6.png" alt="This is another progress screenshot; it's of my first successful implementation of a specular material." style="width:100%;max-width:300px">
+                <img class="myImg" src="../images/baitorbullet/screen5.png" alt="Each boss is the arm of an interdimensional mega-octopus; fights play out like a hybrid between Cuphead and Contra, with plenty of platforms and peril." style="width:100%;max-width:300px">
+            </td>
+            <td>
+                <img class="myImg" src="../images/baitorbullet/screen6.png" alt="When you lose a fight, you sell all your fish for shells to keep getting upgrades, and the cycle begins again!" style="width:100%;max-width:300px">
 
             </td>
         </tr>
@@ -158,18 +166,20 @@
             <td>
                 <h2 class="merriweather" style="text-align:center"><u>Programming Accomplishments</u></h2>
                 <ul>
-                    <li>Implemented fundamentals of the raytracing algorithm (rays, points, surfaces) in C++</li>
-                    <li>Implemented backface culling for triangles</li>
-                    <li>Implemented point and ambient lighting and materials with tunable diffuse, specular, and ambient properties</li>
-                    <li>Implemented glazed surfaces</li>
-                    <li>Moved the position of the camera and objects in the scene to create a short movie</li>
+                    <li>Implemeted a dynamic dialogue system capable of prioritizing different conversations applicable to different scenarios</li>
+                    <li>Integrated a currency / shop system into the game's systems to allow the player to purchase upgrades</li>
+                    <li>Created movement and interaction systems to allow player to shop and talk to NPCs</li>
+                    <li>Scripted bookened introduction and finale cutscenes</li>
+                    <li>Implemented all tutorial dialogue for the player's first run</li>
                 </ul>
             </td>
 
             <td>
                 <h2 class="merriweather" style="text-align:center"><u>Other Accomplishments</u></h2>
                 <ul>
-                    <li>Wrote a report detailing my implementation of the project (accessible via GitHub)</li>
+                    <li>Led and managed an 8-person engineering team within a larger 23 person development team</li>
+                    <li>Presented progress updates to producer throughout semester</li>
+                    <li>Conducted code reviews for members of engineering team</li>
                 </ul>
             </td>
 
@@ -182,7 +192,7 @@
             <tr>
                 <td>
                     <!--Previous-->
-                    <a href="../projectpages/baitorbullet.html" target="_self">
+                    <a href="../projectpages/lownoon.html" target="_self">
                         <div class="buttonc">
                             <h3>
                                 <b>< Previous</b>
@@ -196,7 +206,7 @@
                 <td>
                     <!--Next-->
 
-                    <a href="../projectpages/valiantine.html" target="_self">
+                    <a href="../projectpages/raytrace.html" target="_self">
                         <div class="buttonc">
                             <h3>
                                 <b>Next ></b>
@@ -262,6 +272,7 @@
         var img4 = imgs[3];
         var img5 = imgs[4];
         var img6 = imgs[5];
+
 
         arrowL.onclick = function () {
             plusImages(-1);
