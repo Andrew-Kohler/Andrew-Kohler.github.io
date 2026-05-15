@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Two Friends In The Woods | Andrew Kohler</title>
+    <title>Test Project | Andrew Kohler</title>
     <link rel="icon" type="image/x-icon" href="../images/logotransp.png">
 
     <link rel="stylesheet" href="../css/base.css">
@@ -45,10 +45,10 @@
         <table class="techstacktable">
             <tr>
                 <td>
-                    <h2 class="merriweather" style="text-align:center">Unity</h2>
+                    <h2 class="merriweather" style="text-align:center">C#</h2>
                 </td>
                 <td>
-                    <h2 class="merriweather" style="text-align:center">C#</h2>
+                    <h2 class="merriweather" style="text-align:center">Unity</h2>
                 </td>
                 <td>
                     <h2 class="merriweather" style="text-align:center">HLSL</h2>
@@ -120,7 +120,7 @@
                         <!--Download and Code buttons-->
                         <tr>
                             <td>
-                                <a href="https://github.com/Andrew-Kohler/TwoFriendsInTheWoods" target="_blank">
+                                <a href="../projectpages/lownoon.html" target="_self">
                                     <div class="buttontop">
                                         <h3>
                                             <b>Source Code</b>
@@ -129,7 +129,7 @@
                                 </a>
                             </td>
                             <td>
-                                <a href="https://narwhal-productions.itch.io/two-friends-in-the-woods-one-of-whom-is-dying" target="_blank">
+                                <a href="../projectpages/lownoon.html" target="_self">
                                     <div class="buttontop">
                                         <h3>
                                             <b>Game Download</b>
@@ -149,7 +149,7 @@
                     <table class="modaltable">
                         <tr>
                             <td>
-                                <img class="myImg" src="../images/beacon/screen7.png" alt="My shadow shader recognizes the parts of the mesh in shadow, and instead of recoloring them, renders a different (in this case inverted) texture over those areas, keeping my color palette firmly to 2." style="width:100%;max-width:300px">
+                                <img class="myImg" src="../images/beacon/screen0.png" alt="Each conversation positions and views the characters uniquely, elevating their conversations into cutscenes." style="width:100%;max-width:300px">
                                 <!-- Modal -->
                                 <div id="myModal" class="modal">
                                     <span class="close">&times;</span>
@@ -174,7 +174,7 @@
 
                             </td>
                             <td>
-                                <img class="myImg" src="../images/beacon/screen5.png" alt="Everything comes together in scenes like these - sweeping vistas in two colors, framed to make the conversation cinematic." style="width:100%;max-width:300px">
+                                <img class="myImg" src="../images/beacon/screen3.png" alt="Each environment is crafted to be unique and memorable as well, so that walking through the woods is always visually engaging and never a chore.">
 
                             </td>
                         </tr>
@@ -184,97 +184,27 @@
             </tr>
 
         </table>
-
-        <!--QuickNav buttons-->
-        <h3 class="merriweather" style="text-align:center"><b>Jump to info on...</b></h3>
-        <div>
-            <table class="nexttable">
-                <tr>
-                    <td>
-                        <!--QuickNav 1-->
-                        <a href="../projectpages/beacon.html#jump0" target="_self">
-                            <div class="buttonc">
-                                <h3>
-                                    <b>Shaders</b>
-                                </h3>
-                            </div>
-                        </a>
-                    </td>
-                    <td>
-                        <!--QuickNav 2-->
-                        <a href="../projectpages/beacon.html#jump1" target="_self">
-                            <div class="buttonc">
-                                <h3>
-                                    <b>NavMesh</b>
-                                </h3>
-                            </div>
-                        </a>
-                    </td>
-                    <td>
-                        <!--QuickNav 3-->
-                        <a href="../projectpages/beacon.html#jump2" target="_self">
-                            <div class="buttonc">
-                                <h3>
-                                    <b>Content Dialogue</b>
-                                </h3>
-                            </div>
-                        </a>
-                    </td>
-                </tr>
-            </table>
-        </div>
-
         <img class="banner" src="../images/buffersmall.png" alt="A small pixel art divider.">
 
-        <!--ABOUT THE PROJECT-->
         <div class="aboutgrid">
             <!--Section 1-->
-            <div class="aboutnew" style="justify-self: center;" id="jump0">
-                <h2 class="merriweather" style="text-align:center"><u>Unity In Two Bit</u></h2>
+            <div class="aboutnew" style="justify-self: center;">
+                <h2 class="merriweather" style="text-align:center"><u>About the Project</u></h2>
                 <p>
-                    The central technical challenge of this project was making a 3D game that exists solely in two colors; shadows and lights couldn't be allowed to behave in a naturalistic manner and create shades of gray.<br /><br />
-                    To solve this problem, I created a fragment shader (first with HLSL, and then ported to Unity ShaderGraph) that takes in the light level being cast on an object as input, and uses it to determine whether an object's texture should be inverted at each given point rendered. The result
-                    removes any gradiation caused by Unity's lighting model, replacing it with a cohesive binary.
+                    <i>Two Friends In The Woods, One Of Whom Is Dying</i> is the creative work made for my undergraduate honors thesis at the University of Florida. As a project-based thesis, its focus was on demonstrating
+                    the programming and game development skills that I built over my time as a Digital Arts and Sciences (BS) student. <br /><br />Filler text that I am typing late at night because it is late and I am tired.
                 </p>
             </div>
-            <img class="myImgBody" src="../images/beacon/code0.png" alt="Though the final script is small, it's incredibly mighty! The yellow node contains custom scripting to access values normally restricted to Unity's HLSL support: namely, shadow attenuation, the property that describes the degree to which an object is cast in shadow." style="max-width: 600px; justify-self: center; align-self: center;">
+            <img class="myImgBody" src="../images/beacon/test0.png" alt="My shadow shader recognizes the parts of the mesh in shadow, and instead of recoloring them, renders a different (in this case inverted) texture over those areas, keeping my color palette firmly to 2." style="max-width: 800px; justify-self: center;">
             <!--Section 2-->
-            <img class="myImgBody" src="../images/beacon/code1.png" alt="Pictured is the code that manages the follower's physics component. The Rigidbody attatched is necessary for movement, but parts of its simulation aren't always needed when tracing a path along the navmesh." style="max-width: 600px; justify-self: center; align-self: center;">
-            <div class="aboutnew" style="justify-self: center;" id="jump1">
-                <h2 class="merriweather" style="text-align:center"><u>One Player In Two Characters</u></h2>
+            <img class="myImgBody" src="../images/beacon/test0.png" alt="My shadow shader recognizes the parts of the mesh in shadow, and instead of recoloring them, renders a different (in this case inverted) texture over those areas, keeping my color palette firmly to 2." style="max-width: 800px; justify-self: center;">
+            <div class="aboutnew" style="justify-self: center;">
+                <h2 class="merriweather" style="text-align:center"><u>About the Project</u></h2>
                 <p>
-                    To support the core idea of there being two friends in the woods, I utilized and adapted Unity's navigation mesh packages in combination with my own character controller logic to create a leader/follower dynamic.<br /><br />
-                    The non-player character at any given time will follow the leader within the bounds of the navmesh, obey the same physics as if it were under the control of the player, and remain stationary when it cannot follow the player, enabling
-                    the ability to swap between the characters when they are separated to solve problems.
+                    <i>Two Friends In The Woods, One Of Whom Is Dying</i> is the creative work made for my undergraduate honors thesis at the University of Florida. As a project-based thesis, its focus was on demonstrating
+                    the programming and game development skills that I built over my time as a Digital Arts and Sciences (BS) student. <br /><br />Filler text that I am typing late at night because it is late and I am tired.
                 </p>
             </div>
-            <!--Section 3-->
-            <div class="aboutnew" style="justify-self: center;" id="jump2">
-                <h2 class="merriweather" style="text-align:center"><u>Words Between Two People</u></h2>
-                <p>
-                    In addition to writing the script, I needed to write the container that held it. Using a ScriptableObject template, I created a content-driven way to set up cutscenes where the characters speak to each other. <br /><br />
-                    Behind the scenes, a conversation manager uses this data to change the speech bubble sprite and update the dialogue, and also handles transitions between gameplay and cutscene using Unity Cinemachine and the character navmesh AI to
-                    direct the agents to their places for each conversation.
-                </p>
-            </div>
-            <img class="myImgBody" src="../images/beacon/code2.png" alt="A picture of one of the game's conversation content files. Combined with a drag-and-drop prefab with attached cameras and standing marks for both characters, cutscenes become a breeze." style="max-width: 450px; justify-self: center;">
-        </div>
-
-        <h3 class="merriweather" style="text-align:center"><b>Want to see more? Check out...</b></h3>
-        <div>
-            <table class="nexttable">
-                <tr>
-                    <td>
-                        <a href="https://ufdc.ufl.edu/AA00114498/00001" target="_blank">
-                            <div class="buttonc" style="width:500px">
-                                <h3>
-                                    <b>My thesis paper - this game earned me Summa Cum Laude!</b>
-                                </h3>
-                            </div>
-                        </a>
-                    </td>
-                </tr>
-            </table>
         </div>
 
         <div class="paddingblock"></div>
@@ -328,9 +258,16 @@
                 </td>
             </tr>
         </table>
-        <p style="text-align:center;color: #7276e2;"><small>&#169 2026 Andrew Kohler</small></p>
+        <p style="text-align:center;color: #7276e2;"><small>&#169 2024 Andrew Kohler</small></p>
 
     </div>
+
+    
+
+    <div class="example1">
+    </div>
+
+
 
     <script>
         let imgIndex = 0;
@@ -344,16 +281,12 @@
         var arrowL = arrows[0];
         var arrowR = arrows[1];
 
-        var imgs = document.getElementsByClassName("myImg");
-        var imgsBody = document.getElementsByClassName("myImgBody");
-        var allImgs = [imgs[0], imgs[1], imgs[2], imgsBody[0], imgsBody[1], imgsBody[2]]
-
         function plusImages(n) {
             showImages(imgIndex += n);
         }
 
         function showImages(n) {
-            let imgs = allImgs; //.getElementsByClassName("myImg");
+            let imgs = document.getElementsByClassName("myImg");
 
             if (n > imgs.length - 1) { imgIndex = 0 }
             if (n < 0) { imgIndex = imgs.length - 1 }
@@ -364,13 +297,10 @@
         }
 
         // Get the image and insert it inside the modal - use its "alt" text as a caption
-
+        var imgs = document.getElementsByClassName("myImg");
         var img1 = imgs[0];
         var img2 = imgs[1];
         var img3 = imgs[2];
-        var img4 = imgsBody[0];
-        var img5 = imgsBody[1];
-        var img6 = imgsBody[2];
 
 
         arrowL.onclick = function () {
@@ -390,18 +320,6 @@
         }
         img3.onclick = function () {
             imgIndex = 2;
-            showImages(imgIndex);
-        }
-        img4.onclick = function () {
-            imgIndex = 3;
-            showImages(imgIndex);
-        }
-        img5.onclick = function () {
-            imgIndex = 4;
-            showImages(imgIndex);
-        }
-        img6.onclick = function () {
-            imgIndex = 5;
             showImages(imgIndex);
         }
 
