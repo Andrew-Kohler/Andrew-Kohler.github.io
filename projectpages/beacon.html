@@ -230,7 +230,8 @@
         <div class="aboutgrid">
             <!--Section 1-->
             <div class="aboutnew" style="justify-self: center;" id="jump0">
-                <h2 class="merriweather" style="text-align:center"><u>Unity In Two Bit</u></h2>
+                <h2 class="merriweather" style="text-align:center"><u>Black and White Shaders</u></h2>
+                <h5 class="merriweather" style="text-align:center; margin-top:-20px"><i>Unity in Two Bit</i></h5>
                 <p>
                     The central technical challenge of this project was making a 3D game that exists solely in two colors; shadows and lights couldn't be allowed to behave in a naturalistic manner and create shades of gray.<br /><br />
                     To solve this problem, I created a fragment shader (first with HLSL, and then ported to Unity ShaderGraph) that takes in the light level being cast on an object as input, and uses it to determine whether an object's texture should be inverted at each given point rendered. The result
@@ -241,7 +242,8 @@
             <!--Section 2-->
             <img class="myImgBody" src="../images/beacon/code1.png" alt="Pictured is the code that manages the follower's physics component. The Rigidbody attatched is necessary for movement, but parts of its simulation aren't always needed when tracing a path along the navmesh." style="max-width: 600px; justify-self: center; align-self: center;">
             <div class="aboutnew" style="justify-self: center;" id="jump1">
-                <h2 class="merriweather" style="text-align:center"><u>One Player In Two Characters</u></h2>
+                <h2 class="merriweather" style="text-align:center"><u>NavMesh and Follower AI</u></h2>
+                <h5 class="merriweather" style="text-align:center; margin-top:-20px"><i>One Player In Two Characters</i></h5>
                 <p>
                     To support the core idea of there being two friends in the woods, I utilized and adapted Unity's navigation mesh packages in combination with my own character controller logic to create a leader/follower dynamic.<br /><br />
                     The non-player character at any given time will follow the leader within the bounds of the navmesh, obey the same physics as if it were under the control of the player, and remain stationary when it cannot follow the player, enabling
@@ -250,7 +252,8 @@
             </div>
             <!--Section 3-->
             <div class="aboutnew" style="justify-self: center;" id="jump2">
-                <h2 class="merriweather" style="text-align:center"><u>Words Between Two People</u></h2>
+                <h2 class="merriweather" style="text-align:center"><u>Content-Driven Cutscene Creation</u></h2>
+                <h5 class="merriweather" style="text-align:center; margin-top:-20px"><i>Words Between Two Characters</i></h5>
                 <p>
                     In addition to writing the script, I needed to write the container that held it. Using a ScriptableObject template, I created a content-driven way to set up cutscenes where the characters speak to each other. <br /><br />
                     Behind the scenes, a conversation manager uses this data to change the speech bubble sprite and update the dialogue, and also handles transitions between gameplay and cutscene using Unity Cinemachine and the character navmesh AI to

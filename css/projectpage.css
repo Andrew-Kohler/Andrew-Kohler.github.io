@@ -130,13 +130,14 @@ img.bumper {
     transition: 0.2s;
     height: 70px;
     border-radius: 15px;
-    border: 2px solid #0004b4;
+    border: 2px solid #808080;
     text-align: center;
     vertical-align: middle;
 }
 
     .buttontop:hover {
         background-color: #0004b4;
+        border: 2px solid white;
     }
 
     .buttontop h3 {
@@ -279,8 +280,7 @@ img.bumper {
     width: 140px;
     height: 70px;
     border-radius: 15px;
-    border: 2px solid #0004b4;
-
+    border: 2px solid #808080;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -288,6 +288,7 @@ img.bumper {
 
     .buttonc:hover {
         background-color: #0004b4;
+        border: 2px solid white;
     }
 
     .buttonc h3 {
