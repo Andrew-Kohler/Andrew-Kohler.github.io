@@ -247,3 +247,16 @@ div.item-two { /* Table items for project display*/
     font-size: 16px;
     margin: 7px 0px -5px 0px;
 }
+
+.littleAndrew {
+    width: 40px;
+    height: 60px;
+    margin: 0px;
+    background-image: url("../images/z_aboutme/andrewsprite.png");
+    background-size: cover;
+    transition: background-image 0.05s ease-in-out;
+}
+
+    .littleAndrew:hover {
+        background-image: url( "../images/z_aboutme/andrewsprite2.png");
+    }
