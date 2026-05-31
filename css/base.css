@@ -252,11 +252,11 @@ div.item-two { /* Table items for project display*/
     width: 40px;
     height: 60px;
     margin: 0px;
-    background-image: url("../images/z_aboutme/andrewsprite.png");
+    background-image: url("../images/zaboutme/andrewsprite.png");
     background-size: cover;
     transition: background-image 0.05s ease-in-out;
 }
 
     .littleAndrew:hover {
-        background-image: url( "../images/z_aboutme/andrewsprite2.png");
+        background-image: url( "../images/zaboutme/andrewsprite2.png");
     }
