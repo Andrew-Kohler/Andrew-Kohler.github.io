@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DevLog | Andrew Kohler</title>
+    <link rel="icon" type="image/x-icon" href="../images/logotransp.png">
+
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/projectpage.css">
+    <link rel="stylesheet" href="../css/projectimagemodal.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Questrial&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Questrial&display=swap" rel="stylesheet">
+</head>
+
+<body class="main">
+
+    <!--The navbar at the top-->
+    <div class="navbar">
+        <a style="padding:2px 6px" href="index.html"><img src="../images/logotransp.png" alt="Andrew's logo." width="50" height="50"></a>
+        <a href="../allProjects.html">All Projects</a>
+        <a href="../aboutAndrew.html">About Andrew</a>
+    </div>
+
+    <img class="banner" src="../images/bannerNew.png" alt="A starry banner.">
+
+    <!--Where unique page content begins-->
+    <!--Title & dev time-->
+    <table class="titletable">
+        <tr>
+            <td>
+                <img class="bumper" src="../images/bufferl.png" alt="Left title bumper.">
+            </td>
+            <td>
+                <h1 class="projtitle" style="text-align:center">OddQuatic</h1>
+            </td>
+            <td>
+                <img class="bumper" src="../images/bufferr.png" alt="Right title bumper.">
+            </td>
+        </tr>
+    </table>
+    <h3 class="merriweather" style="text-align:center"><b>Development started: </b>August 2026</h3>
+
+    <!--High-value intel-->
+
+    <img class="image" src="../images/devlogs/oddquatic/Thumbnail1.png" alt="A picture of the most recent update to OddQuatic." style="width:800px; height:500px">
+    <div class="paddingblock"></div>
+
+    <div class="about">
+        <h2 class="merriweather" style="text-align:center"><u>About the Project</u></h2>
+        <p>
+            OddQuatic is a mobile MMO, where each user keeps fish that swim across the ocean. If you see a fish, it’s because another user is online. See the vast variety of fish, create your own, interact with each other via your fish, and combine your fish with others’ to truly turn the ocean into a place most Odd.
+        </p>
+        <p>
+            I'm developing OddQuatic to launch on iOS and Android, using the project as an opportunity to learn about the mobile development lifecycle as well as networking and database backends in games. The contents of this devlog include progress updates, explorations of my technical decision making, and deep dives (pun intended) into architectural choices and processes.
+        </p>
+    </div>
+
+    <div class="paddingblock"></div>
+
+    <div class="about">
+        <h2 class="merriweather" style="text-align:center"><u>Table Of Contents</u></h2>
+        <ol style="padding: 0px 70px; text-align: left; font-size:18px">
+            <!--TABLE OF CONTENTS-->
+            <li>
+                <a href="../devlogs/devlog.html#jump0" target="_self" style="">First Post - Project Introduction</a>
+            </li>
+            <li><a href="../devlogs/devlog.html#jump1" target="_self" style="">???</a></li>
+        </ol>
+    </div>
+
+    <img class="banner" src="../images/buffersmall.png" alt="A small pixel art divider.">
+
+    <!--ENTRIES-->
+    <!--Entry 1-->
+    <div class="about">
+        <h2 class="merriweather" style="text-align: left; padding: 0px 70px;" id="jump0"><u>First Post - Project Introduction</u></h2>
+        <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>8/26/26</i></h4>
+        <p>
+            And so we begin!
+        </p>
+        <p>
+            I'll be aiming to update this log frequently over the next few months as development on this project really gets underway. My first order of business is to explore the technologies I think I want to use - <b>Unity, Unity Online Services, and MongoDB</b> - and examine them to see if they're really the best fit for this project and its needs, or if my prototype should transition to
+            different platforms.
+        </p>
+        <p>
+            A little bit about the project itself, though, before taking the time to outline technical needs. My initial interest in OddQuatic as a project was the idea of a shared fish tank - users could open their installation of the game, and be greeted by not only their fish, but the fish of others. The foundation of this game is fish swimming from left to right across the screen, and at the
+            right screen boundary, they're just swimming into someone else's tank from the left. When players are online, their fish are online, so seeing unfamiliar fish is a sign that you're not alone. That's where "MMO" comes from in the initial description - massive might be a stretch, but this is a multiplayer online aquarium.
+        </p>
+        <p>
+            I'm also interested in making use of and learning about databases. Right now, I can't tell you the difference between SQL and NoSQL, but I know it's important! More than just learning about them, though, OddQuatic's mechanics involve times where an online user will need a reference to an offline user's fish, and the game will need to modify that fish so that the changes exist when
+            the latter user logs back on. You might have noticed my choice of noun in "user" as well; people switch phones all the time, so currently included in the scope of this project is a very basic account system.
+        </p>
+        <p>
+            Local storage of data would potentially be practical without those two considerations, but a database storage system not only accounts for what I want to do right now, it's
+            futureproofing for other online or connectivity based mechanics involving multiple users. There's an extra labor cost involved in setting up a database compared to a local text file, of course, but I place the ability to create unique online interactions as something worth the time cost.
+        </p>
+        <p>
+            Finally, I do want to ship this project to mobile platforms. Having easy access to a global aquarium and being able to casually make a fish or see if any friends are passing by, or lining up your phones to watch your fish cross each other's screens, are ideas that have had a glowing reception by my similarly-aged coworkers that make up part of my target audience.
+        </p>
+        <p>
+            The technical needs that my toolkit needs to meet based off of that description, then, are as follows:
+            <ul>
+                <li>
+                    I need to be able to access an always-online storage system. I need to use this storage system to look up, and emplace, objects with unique ID's and other distinguishing information rapidly. The order of my data is irrelevant to gameplay; speed is the priority in both reading and writing, so I want a solution that's fast.
+                </li>
+                <li>
+                    That storage system should also be reliable. Being able to load fish into the game, and create new ones, are tasks that are fundamental to my gameplay loop, and if performing those actions has a significant error rate, the game isn't fun.
+                </li>
+                <li>
+                    I need to be able to send requests between clients and a server. There isn't a need for pinpoint realtime accuracy, like a fighting game, but a gap of a few seconds between one player sending a server request and another player receiving the result of it from the server is desirable for the intended gameplay.
+                </li>
+                <li>
+                    Again, the method of networking should be reliable; this game relies heavily on players being "always online".
+                </li>
+                <li>
+                    I need to develop in an environment that makes mobile development, testing, and deployment relatively simple. Low iteration times will be essential to network tests early on, and a platform that has options or documentation on performance optimization for mobile would be excellent. (Anything <i>can</i> be optimized for mobile, but as someone new to the practice, I'd
+                    appreciate some help.)
+                </li>
+            </ul>
+        </p>
+
+        <p>
+            As a final note, there are other gameplay elements that I'll be getting into as this blog continues that weren't brought up here, but for my purposes right now, all premade engines generally have equal capabilities in that regard. Thanks for reading my first log - <b>sea</b> you next time!
+        </p>
+        <p>
+            <i>- Andrew</i>
+        </p>
+    </div>
+
+    <div class="paddingblock"></div>
+
+    <!--Entry 2-->
+    <div class="about">
+        <h2 class="merriweather" style="text-align: left; padding: 0px 70px;" id="jump1"><u>???</u></h2>
+        <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>???</i></h4>
+        <p>
+            Coming soon...
+        </p>
+    </div>
+
+    <div class="paddingblock"></div>
+
+    <!--The bottom of the page ending bit-->
+    <img class="banner" src="../images/buffer2.png" alt="A pixel art divider.">
+
+    <h4 style="text-align: center; color: #7276e2; margin-bottom: -5px; margin-top: -10px ">Want to get in touch? Find me in all of these places!</h4>
+    <table class="bottable">
+        <tr>
+            <td>
+                <p>Link up on <u><a href="https://www.linkedin.com/in/andrew-kohler-pixel-imperfect/" target="_blank">my LinkedIn profile</a></u></p>
+            </td>
+            <td>
+                <p>Scratch an itch on <u><a href="https://p1xel-imperfect.itch.io/" target="_blank">my Itch.io page</a></u></p>
+            </td>
+            <td>
+                <p>Send me an email at <u><a href="mailto:awk481@gmail.com" target="_blank">awk481@gmail.com</a></u></p>
+            </td>
+        </tr>
+    </table>
+    <p style="text-align:center;color: #7276e2;"><small>&#169 2026 Andrew Kohler</small></p>
+
+</body>
+</html>

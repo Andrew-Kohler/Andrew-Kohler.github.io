@@ -200,6 +200,16 @@ img.bumper {
     text-align:left;
 }
 
+    .about ul {
+        padding: 0px 70px;
+        font-size: 20px;
+    }
+
+    .about li {
+        text-align: left;
+        padding: 5px 0px;
+    }
+
 /* New about blocks that are properly segmented*/
 
 .aboutgrid {
