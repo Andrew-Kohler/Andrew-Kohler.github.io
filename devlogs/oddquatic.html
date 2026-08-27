@@ -63,10 +63,9 @@
         <h2 class="merriweather" style="text-align:center"><u>Table Of Contents</u></h2>
         <ol style="padding: 0px 70px; text-align: left; font-size:18px">
             <!--TABLE OF CONTENTS-->
-            <li>
-                <a href="../devlogs/devlog.html#jump0" target="_self" style="">First Post - Project Introduction</a>
-            </li>
-            <li><a href="../devlogs/devlog.html#jump1" target="_self" style="">???</a></li>
+            <li><a href="../devlogs/devlog.html#jump0" target="_self" style="">First Post - Project Introduction</a></li>
+            <li><a href="../devlogs/devlog.html#jump1" target="_self" style="">Choosing An Engine Based On My Criteria - Networking</a></li>
+            <li><a href="../devlogs/devlog.html#jump2" target="_self" style="">Choosing An Engine Based On My Criteria - Mobile</a></li>
         </ol>
     </div>
 
@@ -133,15 +132,119 @@
 
     <!--Entry 2-->
     <div class="about">
-        <h2 class="merriweather" style="text-align: left; padding: 0px 70px;" id="jump1"><u>???</u></h2>
-        <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>???</i></h4>
+        <h2 class="merriweather" style="text-align: left; padding: 0px 70px;" id="jump1"><u>Choosing An Engine Based On My Criteria - Networking</u></h2>
+        <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>8/27/26</i></h4>
         <p>
-            Coming soon...
+            Ah, the question every developer must face. What will I use to make my game?
+        </p>
+        <p>
+            Firstly, I'll establish some ground rules that I'm following to make this question a little less intimidating. I plan on using a commercially available game engine. An entirely custom solution would be DRAMATICALLY educational, but I want to be able to ship this project in 4-6 months with a first version, and in my personal experience,
+            even a guided construction of a well-made game engine takes 4-6 months on its own. I'm considering Unity 6, Unreal 5, and Godot, as they're commonly known and used across the games industry, the field I find myself in.
+        </p>
+        <p>
+            I've used Unity to create an initial prototype, and have extensive familiarity with it, but on the verge of starting this project in full, I'd like to conduct some further analysis. I'll be evaluating each of my choices by the following critera, based on my needs in the first post:
+            <ul>
+                <li>
+                    How well suited are the engine's networking capabilities to handle simple client-server relations at scale?
+                </li>
+                <li>
+                    What features does the engine provide that are targeted to mobile development?
+                </li>
+                <li>
+                    What integrations exist between the engine and common database backends?
+                </li>
+            </ul>
+        </p>
+        <p>
+            By common database backends, I'm referring to PostgreSQL and MongoDB, which some databases research (coming in full soon) has highlighted as the most common SQL and NoSQL solutions respectively, both with virtues for game development. I'm still missing some context as to how these databases are hosted, as all of the prototype work I've done with MongoDB has
+            been through a local host, but for now, I at least understand that there needs to exist (a) a database, (b) a server via which to access that database, and (c) a game to do the accessing. Let's get to it!
+        </p>
+
+        <h3 class="merriweather" style="text-align: left; padding: 0px 70px;"><i><u>Networking</u></i></h3>
+        <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>Unity</i></h4>
+        <p>
+            Unity's official page for their networking services is impressive. They offer pre-existing packages for social components like friending users as well as different packages geared towards casual, fast-paced competitive, and event-driven/idle multiplayer games.
+            On closer inspection, the event-driven module (Cloud Code) appears to be more geared towards live game updates and, appropriately, using code that's on the cloud, so perhaps not exactly what I'm looking for. I moved to Unity Online Services and found an extensive list of products; they have solutions for player accounts and management,
+            analytics, cloud saves, pretty much anything I could ever need. If I were making this game purely to get it out the door as quickly as possible, I would entirely use their pre-existing solutions; they're well documented with transparent pricing and capabilities.
+        </p>
+        <p>
+            However, I'm pursuing a custom solution, trading that safety and convenience for flexibility and a better understanding of what's under the hood. My research eventually led me to a more general resource that filled in some gaps for me:
+            <ul>
+                <li>The 4 main areas of concern in any multiplayer game are the runtime, transport, backend, and fleet. The runtime is the game itself, the transport is the layer that communicates between runtimes, the backend is the server supporting communication, and the fleet is the collection of servers we may use to host the game</li>
+                <li>There's a difference between peer to peer (direct - everyone connected to everyone else) and peer to peer (client server - one player is a host)</li>
+                <li>I'm pursuing a dedicated server model</li>
+                <li>There are lots of options to support dedicated servers - Amazon GameLift, Azure PlayFab, GCP</li>
+                <li>PlayFab has robust player account support</li>
+                <li>Each of the above services offer managed database options</li>
+            </ul>
+        </p>
+        <p>
+            So, the nature of this project has veered somewhat into understanding how major commercial server services and their database integrations work. Returning to engine analysis, though, the rest of the video series I cited and the documentation on all of these servers gives me confidence that Unity can interface with a dedicated server in a way I'll be able to understand.
+            Unity does not offer a service as a company to host dedicated servers, but their platform fully supports making a "Dedicated Server" build with no graphics or audio to live on the server as the host. It would take a little legwork, but I expected nothing less.
+        </p>
+        <p>
+            There are also several plugins that appear to handle many of the API needs for a database specifically. I'll keep them in mind! As well, I found a very cool portfolio piece of someone's with them making a server themselves from scratch and integrating it with Unity. I do not know anywhere near enough about servers to parse it, but I'm saving it here for future education.
+        </p>
+        <ul>
+            <li><u><a href="https://unity.com/features/multiplayer" target="_blank">Unity official multiplayer page</a></u></li>
+            <li><u><a href="https://www.youtube.com/watch?v=77vYKsXC4IE" target="_blank">Multiplayer game architecture in Unity</a></u></li>
+            <li><u><a href="https://gameye.com/unity-engine/" target="_blank">Example of a 3rd party service for dedicated servers</a></u></li>
+            <li><u><a href="https://discussions.unity.com/t/opendatabase-free-database-backend-hosting-for-unity/1731239" target="_blank">Database plugin</a></u></li>
+            <li><u><a href="https://github.com/Jeonhyeonmin/Unity-MMO-Client-Server" target="_blank">Custom server</a></u></li>
+        </ul>
+        <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>Unreal</i></h4>
+        <p>Knowing now that the keyword "dedicated server" will be practical to me, looking up how to make an Unreal game with a dedicated server provided me with an Epic-made tutorial. Wonderful!</p>
+        <p>However, just a little more research reveals that to make a Dedicated Server build, I need a source copy of the engine, not the precompiled binaries. This isn't prohibitive, I currently have the ability to requisition the hardware space for it, but it is a long, error prone step.</p>
+        <p>My second source also has some fantastic explanations of the different dedicated server options availible to me.
+        <ul>
+            <li>Self managed orchestration services give full control to me over server scaling, allocation, and checkups - great for something with very specific needs (example service - Kubernetes)</li>
+            <li>Managed game-server hosting is where those services I listed earlier fall into - the platform will handle scaling and placement, and I do a lot less management but give up a lot of control</li>
+            <li>Game-specific hosting provides like Gameye spin up a server on request, kind of like P2P client/server with the "host" just being the service instead of a player</li>
+        </ul>
+        </p>
+        <p>
+            With my question answered (yes, it's possible and supported), I'll be checking the box and moving on. Like Unity, Unreal also does not offer an internal server system, but has several utilities for online functionality like accounts, player data storage, and lobbies.
+        </p>
+        <ul>
+            <li><u><a href="https://dev.epicgames.com/documentation/unreal-engine/setting-up-dedicated-servers-in-unreal-engine?lang=en-US" target="_blank">Epic's documentation on dedicated server setup</a></u></li>
+            <li><u><a href="https://www.strayspark.studio/blog/ue5-dedicated-server-linux-docker-deploy-2026" target="_blank">Information on online dedicated server setup</a></u></li>
+            <li><u><a href="https://onlineservices.epicgames.com/" target="_blank">Epic Online Services</a></u></li>
+        </ul>
+        <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>Godot</i></h4>
+        <p>Again, knowing what to look up has made this pretty simple. Godot supports networking/multiplayer and a dedicated server architecture. Between all three of these, it doesn't really look like there's a clear winner; they all have their unique networking systems that will need code, and all of them support a connection with a dedicated server.</p>
+        <ul>
+            <li><u><a href="https://docs.godotengine.org/en/stable/tutorials/export/exporting_for_dedicated_servers.html" target="_blank">Godot dedicated server docs</a></u></li>
+            <li><u><a href="https://www.reddit.com/r/godot/comments/1cuvjz0/an_intro_to_dedicated_servers/" target="_blank">Dedicated server full tutorial</a></u></li>
+        </ul>
+        <p>So, is there a winner? In my books, not yet. Each engine provides the functionality and integration I need, and there's not a lot of diversity in the ways they provide it. This hasn't altered my initial choice of Unity yet, a decision currently motivated by the next criteria I need to analyze: practicality for mobile development.</p>
+        <p>I realized a little ways into writing about Unity's multiplayer capabilities that this is a multi-day, multi-post affair. See you next time for looking at each engine's mobile development capabilities!</p>
+        <p>
+            <i>- Andrew</i>
         </p>
     </div>
 
     <div class="paddingblock"></div>
 
+     <div class="about">
+        <h2 class="merriweather" style="text-align: left; padding: 0px 70px;" id="jump2"><u>Choosing An Engine Based On My Criteria - Mobile</u></h2>
+        <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>8/2?/26</i></h4>
+        <p>
+           Coming soon...
+        </p>
+     </div>
+
+    <!--
+        <h3 class="merriweather" style="text-align: left; padding: 0px 70px;"><i><u>Mobile Development</u></i></h3>
+        <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>Unity</i></h4>
+        <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>Unreal</i></h4>
+        <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>Godot</i></h4>
+
+        <h3 class="merriweather" style="text-align: left; padding: 0px 70px;"><i><u>Databases</u></i></h3>
+        <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>Unity</i></h4>
+        <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>Unreal</i></h4>
+        <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>Godot</i></h4>
+        https://discussions.unity.com/t/how-can-i-connect-unity-to-postgres-database/891968
+        -->
     <!--The bottom of the page ending bit-->
     <img class="banner" src="../images/buffer2.png" alt="A pixel art divider.">
 
