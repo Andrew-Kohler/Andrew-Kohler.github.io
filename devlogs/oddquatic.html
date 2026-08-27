@@ -195,12 +195,13 @@
         <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>Unreal</i></h4>
         <p>Knowing now that the keyword "dedicated server" will be practical to me, looking up how to make an Unreal game with a dedicated server provided me with an Epic-made tutorial. Wonderful!</p>
         <p>However, just a little more research reveals that to make a Dedicated Server build, I need a source copy of the engine, not the precompiled binaries. This isn't prohibitive, I currently have the ability to requisition the hardware space for it, but it is a long, error prone step.</p>
-        <p>My second source also has some fantastic explanations of the different dedicated server options availible to me.
-        <ul>
-            <li>Self managed orchestration services give full control to me over server scaling, allocation, and checkups - great for something with very specific needs (example service - Kubernetes)</li>
-            <li>Managed game-server hosting is where those services I listed earlier fall into - the platform will handle scaling and placement, and I do a lot less management but give up a lot of control</li>
-            <li>Game-specific hosting provides like Gameye spin up a server on request, kind of like P2P client/server with the "host" just being the service instead of a player</li>
-        </ul>
+        <p>
+            My second source also has some fantastic explanations of the different dedicated server options availible to me.
+            <ul>
+                <li>Self managed orchestration services give full control to me over server scaling, allocation, and checkups - great for something with very specific needs (example service - Kubernetes)</li>
+                <li>Managed game-server hosting is where those services I listed earlier fall into - the platform will handle scaling and placement, and I do a lot less management but give up a lot of control</li>
+                <li>Game-specific hosting provides like Gameye spin up a server on request, kind of like P2P client/server with the "host" just being the service instead of a player</li>
+            </ul>
         </p>
         <p>
             With my question answered (yes, it's possible and supported), I'll be checking the box and moving on. Like Unity, Unreal also does not offer an internal server system, but has several utilities for online functionality like accounts, player data storage, and lobbies.
@@ -225,24 +226,99 @@
 
     <div class="paddingblock"></div>
 
-     <div class="about">
+    <div class="about">
         <h2 class="merriweather" style="text-align: left; padding: 0px 70px;" id="jump2"><u>Choosing An Engine Based On My Criteria - Mobile</u></h2>
-        <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>8/2?/26</i></h4>
+        <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>8/27/26</i></h4>
         <p>
-           Coming soon...
+            The journey continues! Let's dive into each platform's support for mobile developers and see what they have to offer. As a referesher, the question I want to answer for each of these platforms is "What features does the engine provide that are targeted to mobile development?"
         </p>
-     </div>
-
-    <!--
         <h3 class="merriweather" style="text-align: left; padding: 0px 70px;"><i><u>Mobile Development</u></i></h3>
         <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>Unity</i></h4>
+        <p>
+            Unity is off to a strong start based on its landing page for mobile developers alone. Company-made tutorials for mobile development, live operations, growth and monetization, the whole 9 yards. I will do my best to be more than a hapless consumer, though, and dig a little deeper.
+        </p>
+        <p>
+            Many of the LiveOps services Unity offers tie directly back to their networking services, but additionally, they have documentation and support for things like in app purchases, push notifications, and a variety of analytics. It's all very impressive, for sure.
+        </p>
+        <p>
+            I'm far from the first person to conduct an alaysis like this as well, so my next step was to see what other users are saying. What I found seems to support the company line - Unity excels at performing well on a large range of devices, and has tools targeted specifically for mobile optimization. The common detriments to using it to mobile dev
+            are a lack of advanced tools and ability to create high-fidelity experiences with complicated 3D graphics. As someone using pixel art, neither of these things really worry me.
+        </p>
+        <p>
+            I'm already at a point where I feel my question is answered for Unity, but I'll go one step further and interrogate what exactly these performance tools are. I quite enjoy learning about that sort of thing. It seems that most of the tools availible are just permutations of Unity's profiling systems, but that's honestly good enough; not having to fight a PC-only
+            tool to show me information about a phone seems like a big advantage. I also found a lot of potential optimization techniques with examples, but with premature optimization being the root of all evil, I'll save those for, at the earliest, having a game to even optimize.
+        </p>
+        <ul>
+            <li><u><a href="https://unity.com/solutions/mobile" target="_blank">Unity mobile landing page</a></u></li>
+            <li><u><a href="https://appradar.com/blog/mobile-game-engines-development-platforms" target="_blank">Mobile dev compare and contrast</a></u></li>
+            <li><u><a href="https://animost.com/ideas-inspirations/unity-vs-unreal-engine-for-mobile-games/" target="_blank">Mobile dev compare and contrast 2</a></u></li>
+            <li><u><a href="https://medium.com/predict/unity-vs-unreal-engine-which-is-best-for-mobile-game-development-9da75eb68978" target="_blank">Mobile dev compare and contrast 3</a></u></li>
+            <li><u><a href="https://generalistprogrammer.com/tutorials/unity-mobile-game-optimization-complete-guide" target="_blank">Unity mobile optimization</a></u></li>
+        </ul>
         <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>Unreal</i></h4>
+        <p>
+            Where Unity falters, Unreal excels, and vice versa. That's the impression I have from only researching Unity; Unreal's vast array of tools for high-speed multiplayer networking, animation, and structured development of large-scale games are all advantages it holds over Unity. But let's see if there's any support they have for mobile on their own merits that might be beneficial.
+        </p>
+        <p>
+            Through official channels, Unreal looks like it has a lot of the same bells and whistles that Unity is so proud of - IAP, targeted ways to debug and profile, and ad support, chiefly. Each feature comes with a page worth of documentation, and each feature has platofrm specific documentation. While Epic isn't usually known for documentation, clicking through it has me impressed;
+            reading is one thing and practice is another, of course, but it looks like each feature has enough documentation to get you started using it.
+        </p>
+        <p>
+            Hilariously, there's a page called 'Mobile Development In Unreal Engine For Unity Developers,' as though Epic is trying to poach game devs out of using Unity. The strengths of Unreal it targets are revealing, though, and very informative. There's focus on cross-platform deplyoment and optimization and testing tools, but also on rendering capabilities. This focus carries over to unofficial
+            sources as well; most analyses put UE and Unity toe to toe, but emphasize Unity's ease of use and Unreal's graphical strength. I'll leave it at that for now; UE appears to have everything I'd need to make my game, but I think it also might have a lot more - maybe too much.
+        </p>
+        <ul>
+            <li><u><a href="https://dev.epicgames.com/documentation/unreal-engine/getting-started-with-mobile-development-in-unreal-engine?lang=en-US" target="_blank">Unreal mobile documentation</a></u></li>
+            <li><u><a href="https://dev.epicgames.com/documentation/unreal-engine/unreal-engine-creating-mobile-games" target="_blank">Unreal Unity conversion page</a></u></li>
+            <li><u><a href="https://300mind.studio/blog/unreal-engine-for-mobile-game-development/" target="_blank">Unreal Engine 3rd party analysis</a></u></li>
+        </ul>
         <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>Godot</i></h4>
+        <p>
+            I know literally nothing about Godot mobile development, especially compared to my starter knowledge of the other two engines. Let's change that.
+        </p>
+        <p>
+            It's immediately revealing that every resource for this process is unofficial. Godot is open source, but unlike UE and Unity, there is no central documentation for the basics of mobile gamemaking. The Godot subreddit has a fair few posts on the matter, and there's scattered third party documentation, like the one I linked below for getting set up for Android,
+            but that's about it.
+        </p>
+        <p>
+            Looking for more recent sources, I found a fellow independent developer's devlog. They discuss how they've been making a mobiel game for Godot 3, and in the process of porting it to Godot 4, encountered unforeseen and hard-to-debug performance issues. While I'd be making a 2D game, the light they shone on how this issue has been underreported and not addressed well
+            makes me wary of Godot for mobile at this time.
+        </p>
+        <ul>
+            <li><u><a href="https://www.reddit.com/r/godot/comments/osd17p/do_you_think_godot_is_good_for_mobile_game_dev/" target="_blank">Old community discussion</a></u></li>
+            <li><u><a href="https://developer.android.com/games/engines/godot/godot-configure" target="_blank">Godot for Android</a></u></li>
+            <li><u><a href="https://www.youtube.com/watch?v=5gjnlPtBQMg" target="_blank">Rover Quest devlog</a></u></li>
+        </ul>
+        <p>
+            With enough documentation to potentially make an app on all 3 platforms, the true test here would be to dedicate a week of development to doing just that; making the simplest interactive application possible to test out workflows, adding in a tutorial-adherent or tutorial-like version of a feature I want for my app, like maybe trying out an IAP implementation. With potential
+            for functionality everywhere, the next test becomes usability, and what's possible to achieve realistically rather than as advertised. However, I don't have the resources for that at my team size (1) and my development time (4 months), so this search process will have to be the
+            extent of the decision making process.
+        </p>
+        <p>
+            Currently, my thought process is this. I have familiarity with Unreal and Unity, which is enough for me to rule out Godot. "Learning Godot" is an additional 4-6 month process to do it properly, and as it's also currently the worst option for mobile development in
+            terms of documentation and viability. I'm leaning towards Unity at the moment just due to the growing overhead that Unreal represents - not only would I need a source build, but the systems that enable Unreal to produce AAA visuals would in opposition to my simple 2D
+            art goals, not helping them move along.
+        </p>
+        <p>
+            For the final part of this evaluation process, it's clear that the question I need to ask has shifted from "What integrations exist between the engine and common database backends?" to "What would the process be for using a dedicated server to connect players and host a
+            database?" My initial prototyping on this project was using Unity, MongoDB, and a local server thrown up by a bit of Node.js inbetweening. But with an always-online game, that local server becomes online and dedicated.
+        </p>
+        <p>
+            There is still the question of SQL vs NoSQL that needs some further interrogation as well, so I'll be trying to answer those two questions in my next post. The field is narrowed to 2; now to get it down to 1!
+        </p>
+        <p>
+            <i>- Andrew</i>
+        </p>
+    </div>
+
+    <!--
+        
 
         <h3 class="merriweather" style="text-align: left; padding: 0px 70px;"><i><u>Databases</u></i></h3>
         <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>Unity</i></h4>
         <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>Unreal</i></h4>
         <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>Godot</i></h4>
+        https://unity.com/solutions/mobile
         https://discussions.unity.com/t/how-can-i-connect-unity-to-postgres-database/891968
         -->
     <!--The bottom of the page ending bit-->
