@@ -66,6 +66,8 @@
             <li><a href="../devlogs/oddquatic.html#jump0" target="_self" style="">First Post - Project Introduction</a></li>
             <li><a href="../devlogs/oddquatic.html#jump1" target="_self" style="">Choosing An Engine Based On My Criteria - Networking</a></li>
             <li><a href="../devlogs/oddquatic.html#jump2" target="_self" style="">Choosing An Engine Based On My Criteria - Mobile</a></li>
+            <li><a href="../devlogs/oddquatic.html#jump3" target="_self" style="">Choosing An Engine Based On My Criteria - Servers and Databases</a></li>
+            <li><a href="../devlogs/oddquatic.html#jump4" target="_self" style="">???</a></li>
         </ol>
     </div>
 
@@ -226,6 +228,7 @@
 
     <div class="paddingblock"></div>
 
+    <!--Entry 3-->
     <div class="about">
         <h2 class="merriweather" style="text-align: left; padding: 0px 70px;" id="jump2"><u>Choosing An Engine Based On My Criteria - Mobile</u></h2>
         <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>8/27/26</i></h4>
@@ -311,8 +314,220 @@
         </p>
     </div>
 
+    <!--Entry 4-->
+    <div class="about">
+        <h2 class="merriweather" style="text-align: left; padding: 0px 70px;" id="jump3"><u>Choosing An Engine Based On My Criteria - Servers and Databases</u></h2>
+        <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>8/31/26</i></h4>
+        <p>
+            This is gonna take the day, I can feel it in my bones. Let's get started.
+        </p>
+        <h3 class="merriweather" style="text-align: left; padding: 0px 70px;"><i><u>Databases</u></i></h3>
+        <p>
+            Server and database determination are <i>somewhat</i> separate in my eyes. While of course the server side of things will need a clear pathway to access / hold the database, we live in an age of great abundance. The fact that I'm using a prebuilt, managed cloud server fleet abstracts away some of the problems I would face if I wanted to hook up a custom server running
+            off a PC under my desk. One should always validate their assumptions, though - I want to make the choice between SQL and NoSQL first, and then look at my server options from the perspective of needing to connect both a game and a database. I'm currently standing by the choice of either MongoDB or PostgreSQL; they're popular, commonly used, and have been recommended to me
+            in a games context during my research. I'm also curious about what those under-the-desk problems might look like, so hopefully during my server research I can point some fingers at where I might run into trouble making moonshine.
+        </p>
+        <p>
+            So, what have I learned about the difference between SQL and NoSQL? Well, I find it very funny that "NoSQL" stands for "Not Only SQL." But more than that:
+            <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>SQL (Relational)</i></h4>
+            <ul>
+                <li>
+                    Data is organized into tables made up of rows and columns, or in the vernacular, records and fields. An example might be a record corresponding to a UID, and within the record, a variety of a specific player's data is accessible in fields.
+                </li>
+                <li>
+                    The structure of records and fields is defined by schema - blueprints that we define for how data should be stored.
+                </li>
+                <li>
+                    SQL databases scale vertically: more storage availible equates to more capacity.
+                </li>
+            </ul>
+            <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>NoSQL</i></h4>
+            <ul>
+                <li>
+                    NoSQL databases, at a very high level, are best for unstructured or semistructured data. Text, images, videos, sensor data - things of non-uniform scale or format that need to be collected but might require an inefficient amount of schema to put into boxes.
+                </li>
+                <li>
+                    There are subtypes of NoSQL databases; for example, my prototype used a document database, storing data as JSON-like documents. Other types are key-value storage, like a big online map; column-based, best for analytics data; and graph databases, storing nodes and the relationships between them.
+                </li>
+                <li>
+                    NoSQL databases scale horizontally: higher workloads can be supplemented with additional servers. It's the difference between beefing up one server with additional specs (vertical) and adding more servers to efficiently distribute the work.
+                </li>
+            </ul>
+        </p>
+        <p>
+            This really is just choosing the best data structure for the job on a massive, project-defining scale, isn't it?
+        </p>
+        <p>
+            Taking a look at my use case, my data should be very structured. The things that define a fish shouldn't be dynamic in gameplay; while fish might become more complex as I update the game, users won't be submitting or saving fish with a variable number of properties. I could define a fish schema, and always know how to access a fish. The same follows for
+            users. Would a user have-a fish or a fish array? How object oriented can a relational database be? I suppose it's comparable to an inventory system, which I do have an example of thanks to a Generalist Programmer source. Here, the inventory uses a separate schema, but is able to reference the player ID so that both the player and their inventory can be searched for using
+            that same value. That makes a lot of sense to me.
+        </p>
+        <p>
+            Also introduced to me is the idea of <b>polyglot persistence:</b> using multiple databases in the same project so that everything is used for its optimal purpose. For me, this might take the form of using some of Unity Online Services' data management? I'll start with the one database I know I need and go from there.
+        </p>
+        <p>
+            After reading over multiple sources, it seems like I can't necessarily go wrong, so here's a list of factors that I'm basing my decision on.
+            <ul>
+                <li>
+                    SQL databases enforce structure, while NoSQL allow for rapid unstructured iteration and flexibility at the cost of having to pay more manual attention to your data.
+                </li>
+                <li>
+                    PostgreSQL helps greatly with ensuring transactions are atomic (remembering my ACID principles I read about). That's potentially important to me as I plan and scope for player to player communication and exchange!
+                </li>
+                <li>
+                    SQL predates NoSQL in terms of documentation and community, although its history and age do make it a little less intuitive.
+                </li>
+                <li>
+                    For games, SQL has been recommended to me for things with a known structure like player accounts and inventories, while NoSQL works better for iterative or semistructured data like player progression and achievements.
+                </li>
+                <li>
+                    Speed is something of an abstract figure. From what I can tell, more queries may be required to retrieve data in a relational database, whereas just being able to pull up a JSON file by ID with everything in it that you need in a NoSQL context is, relatively, faster. However, in measures and estimates I could find, NoSQL comes out to about 2x as fast as SQL, but both
+                    query times fall within the space of 2 or 3 frames of a 60 FPS game. That might be impactful if rapid retrieval impacted fast-paced gameplay, but for my purposes, both are well within desired limits.
+                </li>
+                <li>
+                    Popular usage appears to be split right down the middle. Fortnite uses NoSQL for player saves, some major MMOs use SQL, and everyone has a favorite. The best advice I've seen is to go with what your team has experience in.
+                </li>
+            </ul>
+        </p>
+        <p>
+            With all that said, I want to try using an SQL database, so welcome to the team <b>PostgreSQL</b>! This is a choice motivated by wanting to have a well-defined structure for player data that's hard for me to break, and relational data being a good fit in general for the player and fish centric data I need to store. While this is a topic that could make up an even deeper dive (what about
+            SQLite? Firebase?), I also want to be conscious of the fact that I'm here to learn. Getting a working knowledge of one part of this vast topic will allow me to better assess the relative costs and benefits based on my own knowledge as an engineer - so let's get learning!
+        </p>
+        <ul>
+            <li><u><a href="https://www.geeksforgeeks.org/dbms/what-is-database/" target="_blank">Databases intro</a></u></li>
+            <li><u><a href="https://generalistprogrammer.com/tutorials/game-database-architecture-complete-backend-guide-2025" target="_blank">NoSQL v. SQL (games)</a></u></li>
+            <li><u><a href="https://www.coursera.org/articles/nosql-vs-sql" target="_blank">NoSQL v. SQL (general)</a></u></li>
+            <li><u><a href="https://www.cloudzero.com/blog/horizontal-vs-vertical-scaling/" target="_blank">Vertical and horizontal scaling</a></u></li>
+            <li><u><a href="https://crux.supercraft.host/blog/player-data-schema-design-nosql-vs-sql/" target="_blank">NoSQL v. SQL (player data)</a></u></li>
+        </ul>
+        <h3 class="merriweather" style="text-align: left; padding: 0px 70px;"><i><u>Servers</u></i></h3>
+        <p>
+            Alright. I need to find a server that meets the following criteria:
+            <ul>
+                <li>
+                    Can serve as host for a multiplayer game and accomodate a large number of users
+                </li>
+                <li>
+                    Has support/documentation for SQL database integration
+                </li>
+                <li>
+                    Has other documented usership for mobile game developers
+                </li>
+                <li>
+                    Won't break the bank of a solo graduate developer
+                </li>
+            </ul>
+        </p>
+        <p>
+            This is an instance where I'm not going to balk at the tried and true, so I'll be doing a comparative analysis of 3 of gaming's largest server providers and corporations in general. Amazon GameLift, Azure PlayFab, and Google Cloud Platform will be the options, and one will emerge victorious. I found a pretty cohesive source comparing each service on a lot of fronts, and
+            the general impression is that that first bullet point is pretty much a moot comparision. The services, respectively, play host to Fortnite, Rainbow Six Siege, and Pokemon Go, so I don't think a scrappy indie mobile game will make too much of a dent. The other three points, though, are definitely worth some independent journalism.
+        </p>
+        <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>Amazon Gamelift</i></h4>
+        <ul>
+            <li>
+                <b>Database x Game: </b>The Amazon Relational Database Service appears to be more or less what I'm looking for. Something I'm unclear about with <i>every</i> option is how the game accesses the database on the server for information, but at least here things are under the same roof. Based on my prototyping where I used Node.js to spin up a local server, my current
+                theory is that a similar script to the one I wrote will be placed on the server and run during bootup, spinning up the database for access. Here, let's do a little diagramming.
+                <img class="image" src="../images/devlogs/oddquatic/Diagram1.png" alt="A picture of the most recent update to OddQuatic." style="width:800px; height:500px">
+                This is my understanding, generally, of how this pipeline might work. I am so excited to correct it as I learn more, but you gotta start somewhere! Anyhow, a service designed for databases under the same roof as what's hosting my game is enough for me, for now.
+            </li>
+            <li>
+                <b>Mobile Support: </b> Short answer, yes! This felt like something of a moot question as well, since the differences between a mobile and PC game come mostly with the game itself, but I wanted to check. I'm glad I did; I found this official Amazon diagram for how their GameLift service works at a high level in the documentation (which seems decent). It looks like my database would fall under backend services?
+                <img class="image" src="../images/devlogs/oddquatic/ThirdParty.png" alt="A picture of the most recent update to OddQuatic." style="width:700px; height:500px">
+            </li>
+            <li>
+                <b>Cost: </b>AWS offers a free tier with $100 in credits off the bat, $100 more for various usage incentives, and will keep the account open for 6 months or until credits run out. That's more than enough to tinker with! This free tier also gives access to RDS, which is perfect.
+            </li>
+            <li>
+                <b>Other: </b>Third party analysis notes a steep learning curve as part of the price here. I found engineer-oriented tutorials on YouTube for getting up and running in Unity and Unreal, which I take as a good sign, but I'll keep an eye on accessibility of the other platforms.
+            </li>
+        </ul>
+        <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>Azure PlayFab</i></h4>
+        <ul>
+            <li>
+                <b>Database x Game: </b> Azure lets me do this:
+                <img class="image" src="../images/devlogs/oddquatic/Azure1.png" alt="An image of Azure's database creation interface." style="width:700px; height:300px">
+                It's rather accessible and compelling, just being able to click around a little and make a new one of these. And what's more compelling?
+                <img class="image" src="../images/devlogs/oddquatic/Azure2.png" alt="An image of Azure informing me of its interconnected services." style="width:500px; height:120px">
+                I can host a database, and the Azure ecosystem will take care of me. Beautiful.
+            </li>
+            <li>
+                <b>Mobile Support: </b> Right on the front page, explicit note of support for App Store and Google Play, as well as SDK's for Unreal and Unity. Looking into the documentation, Android and iOS development are essentially just supported via these SDKs. Wonderful, excellent, moving on.
+            </li>
+            <li>
+                <b>Cost: </b> PlayFab lists out a lot of prices for a lot of different things up front, but most importantly, they have a free tier with "Development Mode" - essentially allowing infinite tinkering within some usage bounds (under 1,000 player accounts created). The free tier allows for a lot of uptime without charge even outside of development mode, about a month's worth. The full
+                monthly breakdown after I'm off the freebie list comes out to about $75, though, the vast majority of that coming out of compute costs rather than network usage with my small estimates. I'm actually not sure if Amazon eats those compute costs themselves or if there's fine print I'm not seeing and my under-a-dollar calculations are purely network costs.
+            </li>
+            <li>
+                <b>Other: </b>Accessibility looks great - documentation, tutorials, and so on. Unsurprisingly, Microsoft and XBox want people in their ecosystem; I wouldn't be shocked if the 'Everything Is An XBOX' initiative actually helped push the accessibility of this service forwards. But I digress.
+            </li>
+        </ul>
+        <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>Google Cloud Platform</i></h4>
+        <ul>
+            <li>
+                <b>Database x Game: </b> GCP offers a managed relational database service on the cloud; wonderful. However, the offered documentation is sparse as far as any information about potential connectivity to any kind of gaming ecosystem at all. The splash page looks like it should have some useful redirects for this sort of documentation, but it's dominated by AI advertisements. Buried
+                in that content, though, I did eventually find a link to a page specializing in databases for games with Google Cloud. It's nice, and offers some tutorials for how to use Spanner, their managed relational database solution, but as soon as I look deeper into the documentation, I again find myself in a landscape not specialized for gaming. It's clear the possibility exists,
+                but I'd have to do some figuring. Gaming isn't even a major header category in the docs.
+            </li>
+            <li>
+                <b>Mobile Support: </b> Niantic used GCP for Pokemon Go, so I know the intergration I'm looking for is entirely possible. Google's documentation, though, seems to focus on mobile development in the traditional sense, which doesn't highlight a lot of terminology I'm familiar with. It looks like it's very Firebase focused as well. Again, an instance where I could definitely
+                puzzle things out, but the documentation just isn't as suited to my use case.
+            </li>
+            <li>
+                <b>Cost: </b> Google's free trial is $300 in credit over 90 days.  It looks like my monthly costs would be somewhere in the realm of $20, which isn't horrible, but that grace period is pretty slim.
+            </li>
+            <li>
+                <b>Other: </b>I'm just really not enamoured with the idea of using this documentation. GCP <i>can</i> do games, but it doesn't look like the starter playplace that will accelerate learning the fundamentals.
+            </li>
+        </ul>
+        <ul>
+            <li><u><a href="https://gamengen.cloud/ultimate-guide-cloud-hosting-multiplayer-games/" target="_blank">Full comparative analysis of cloud hosting services</a></u></li>
+            <li><u><a href="https://aws.amazon.com/free/?refid=ft_rds" target="_blank">AWS free tier</a></u></li>
+            <li><u><a href="https://aws.amazon.com/free/?refid=ft_rds" target="_blank">AWS RDS</a></u></li>
+            <li><u><a href="https://www.youtube.com/watch?v=lZ4a_ZKanT4&list=PL7atF8aclokqatnYOSRonr079q7P7ptmL" target="_blank">AWS x Unity Tutorial</a></u></li>
+            <li><u><a href="https://developer.microsoft.com/en-us/games/products/playfab/#accordion-9246d05c97-item-6d702c5d38" target="_blank">PlayFab splash page</a></u></li>
+            <li><u><a href="https://developer.microsoft.com/en-us/games/products/playfab/pricing/#accordion-2d9e66feb2-item-b60ab480b7" target="_blank">PlayFab pricing</a></u></li>
+            <li><u><a href="https://learn.microsoft.com/en-us/xbox/playfab/" target="_blank">PlayFab documentation</a></u></li>
+            <li><u><a href="https://cloud.google.com/solutions/databases/games" target="_blank">GCP databases for games</a></u></li>
+            <li><u><a href="https://cloud.google.com/blog/products/gcp/how-to-build-mobile-apps-on-google-cloud-platform" target="_blank">GCP mobile dev overview</a></u></li>
+        </ul>
+        <p>
+            So, where does that leave us? I think now I can say.
+        </p>
+        <p>
+            <ul>
+                <li>
+                    <b>Engine:</b> <u>Unity 6 LTS.</u> Unity's lightweight development environment, focus on mobile support, and extensive documentation match my needs on this project. A 2D pixel art style doesn't need Unreal's amazing feature set and build times, and without the need for AAA visuals, Unity's mobile support comes out on top.
+                </li>
+                <li>
+                    <b>Server: </b> <u>Azure Playfab.</u> While the pricing might get a little hairy down the line, the option to keep a game in development mode for an unlimited time, combined with easy linkage to Azure's database services, means actual development won't be impeded by financial logistics. Additionally, the documentation and support ecosystem was my favorite of the three, being the
+                    most oriented to my use case of making video games.
+                </li>
+                <li>
+                    <b>Database: </b> <u>SQL, specifically PostgreSQL</u> if I can. The structured schema of a relational database are an excellent match for my game, wherein the entire development scope for the next 4 months doesn't include anything that can't be broken down into an unchanging format. This structure will help me prevent formatting mistakes and keep data organized and well-maintained.
+                </li>
+            </ul>
+        </p>
+        <p>
+            <i>- Andrew</i>
+        </p>
+    </div>
+
+    <div class="paddingblock"></div>
+
+    <!--Entry 5-->
+    <div class="about">
+        <h2 class="merriweather" style="text-align: left; padding: 0px 70px;" id="jump5"><u>???</u></h2>
+        <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>?/??/26</i></h4>
+        <p>
+            ???
+        </p>
+    </div>
+
+    <div class="paddingblock"></div>
+
+
     <!--
-        
+
 
         <h3 class="merriweather" style="text-align: left; padding: 0px 70px;"><i><u>Databases</u></i></h3>
         <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>Unity</i></h4>
