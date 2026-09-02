@@ -67,7 +67,8 @@
             <li><a href="../devlogs/oddquatic.html#jump1" target="_self" style="">Choosing An Engine Based On My Criteria - Networking</a></li>
             <li><a href="../devlogs/oddquatic.html#jump2" target="_self" style="">Choosing An Engine Based On My Criteria - Mobile</a></li>
             <li><a href="../devlogs/oddquatic.html#jump3" target="_self" style="">Choosing An Engine Based On My Criteria - Servers and Databases</a></li>
-            <li><a href="../devlogs/oddquatic.html#jump4" target="_self" style="">???</a></li>
+            <li><a href="../devlogs/oddquatic.html#jump4" target="_self" style="">My Introduction To PHP</a></li>
+            <li><a href="../devlogs/oddquatic.html#jump99" target="_self" style="">???</a></li>
         </ol>
     </div>
 
@@ -516,11 +517,41 @@
 
     <!--Entry 5-->
     <div class="about">
-        <h2 class="merriweather" style="text-align: left; padding: 0px 70px;" id="jump5"><u>???</u></h2>
-        <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>?/??/26</i></h4>
+        <h2 class="merriweather" style="text-align: left; padding: 0px 70px;" id="jump4"><u>My Introduction To PHP</u></h2>
+        <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>9/2/26</i></h4>
         <p>
-            ???
+            With my choices made, I started to look into any solution that might exist for connecting them. Specifically, I first want to create a link between my shiny new Azure SQL database and my Unity prototype, swapping out my old MongoDB / NodeJS backend
+            and achieving the same level of functionality. I'm choosing to do database integration before game server integration to first understand how the database connectivity works in isolation / through a local host, rather than first networking up multiple instances
+            of my game to communicate and then having to immediately verify that database access is working independently on each instance. In short, I'd rather get the data storage backend working in one place <i>before </i> having to verify that it works in all the edge cases introduced by
+            connectivity (When one person logs off, are their fish properly deloaded? When one person logs on while someone else is online, can we still query correctly?).
         </p>
+        <p>
+            A little research illuminated that for an Azure database, I'd very likely need to put some PHP code server-side to facilitate Unity getting information out of it. My undergraduate major was very informative on the topics of data structures, algorithms, logic, user experience and
+            design, and general programming principles, but the only time we had to do any database integration was with large CSV sheets, so I found myself unfamiliar. What followed was the process of teaching myself some PHP! Here are my thoughts as a first timer:
+            <ul>
+                <li>It's very funny that PHP is a recursive backronym. That sounds like technobabble, but it's not.</li>
+                <li>I think more languages should have a function called "explode()" as part of their STL.</li>
+                <li>There's a lot of convenience in some of the standard functions (I was shocked to find built in sorts) that makes me wonder at the motivation to automate away operations with non-zero instruction and time complexity costs so easily.</li>
+                <li>When reading up on functions, I was already planning to figure out how to do assertions for type validation, but then a little further down the page, it said that PHP 7 instoduced strict typing for functions, so that's nice.</li>
+                <li>Superglobals are nice, and as I'm about to be performing some actual server operations, I presume I'll need them.</li>
+            </ul>
+        </p>
+        <p>
+            With basic syntactical knowledge now under my belt, I think my next step will be to establish a test schema in my database. Going back to not testing too much at once - creating a connection between Unity and the database right now would mean that I'm testing both the connectivity and the schema. I'd like to understand how the latter works before dipping it in the
+            former!
+        </p>
+        <p>
+            Also noting for future research: What is PDO and why are these StackOverflow posts talking about it?
+        </p>
+        <p>
+            <i>- Andrew</i>
+        </p>
+        <ul>
+            <li><u><a href="https://www.w3schools.com/php/" target="_blank">W3Schools PHP</a></u></li>
+            <li><u><a href="https://stackoverflow.com/questions/20601815/calling-php-script-using-c-sharp-unity/25200894#25200894" target="_blank">Connecting Unity / MS SQL DB</a></u></li>
+            <li><u><a href="https://stackoverflow.com/questions/39140068/how-to-connect-to-database-from-unity" target="_blank">Connecting Unity / MS SQL DB 2</a></u></li>
+            <li><u><a href="https://stackoverflow.com/questions/46755494/how-to-connect-unity-mobile-app-to-azure-sql-database" target="_blank">Connecting Unity Mobile / Azure</a></u></li>
+        </ul>
     </div>
 
     <div class="paddingblock"></div>
