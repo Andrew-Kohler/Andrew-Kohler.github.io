@@ -68,6 +68,7 @@
             <li><a href="../devlogs/oddquatic.html#jump2" target="_self" style="">Choosing An Engine Based On My Criteria - Mobile</a></li>
             <li><a href="../devlogs/oddquatic.html#jump3" target="_self" style="">Choosing An Engine Based On My Criteria - Servers and Databases</a></li>
             <li><a href="../devlogs/oddquatic.html#jump4" target="_self" style="">My Introduction To PHP</a></li>
+            <li><a href="../devlogs/oddquatic.html#jump5" target="_self" style="">My Introduction To T-SQL</a></li>
             <li><a href="../devlogs/oddquatic.html#jump99" target="_self" style="">???</a></li>
         </ol>
     </div>
@@ -551,6 +552,74 @@
             <li><u><a href="https://stackoverflow.com/questions/20601815/calling-php-script-using-c-sharp-unity/25200894#25200894" target="_blank">Connecting Unity / MS SQL DB</a></u></li>
             <li><u><a href="https://stackoverflow.com/questions/39140068/how-to-connect-to-database-from-unity" target="_blank">Connecting Unity / MS SQL DB 2</a></u></li>
             <li><u><a href="https://stackoverflow.com/questions/46755494/how-to-connect-unity-mobile-app-to-azure-sql-database" target="_blank">Connecting Unity Mobile / Azure</a></u></li>
+        </ul>
+    </div>
+
+    <div class="paddingblock"></div>
+
+    <!--Entry 6-->
+    <div class="about">
+        <h2 class="merriweather" style="text-align: left; padding: 0px 70px;" id="jump5"><u>My Introduction To T-SQL</u></h2>
+        <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>9/4/26</i></h4>
+        <p>
+            My desire to understand schema and create one of my own led to a very helpful tutorial series created by Microsoft entitled, "Query and modify data with Transact-SQL." It delved into all the basics surrounding essential SQL operations,
+            the differences between SQL and Microsoft's own T-SQL, and even some of the under-the-hood details about execution order and differences between similar instructions. Here are some of my favorite points from my notes:
+            <ul>
+                <li>
+                    SQL is a declarative language, not a procedural one. Procedural languages are pretty much every language I've ever worked with - write a sequence of instructions, let the computer execute it - whereas a declarative format involves you requesting a result and
+                    having (in this case) the <b>database engine's query processor</b> do the evaluation. It makes me imagine what it might involve to write a highly efficient query processor.
+                </li>
+                <li>
+                    The ANSI standard defines the fundamentals of SQL, whereas Microsoft's T-SQL is all the basics plus extensions for writing stored procedures and functions. A stored procedure is a pre-compiled collection of SQL statements, which sound great for compartmentalizing logic
+                    and makign certain often-used calls easily repeatable, and functions (more accurately user-defined functions) are traditional logic statements that can be called in the same way as SQL standard functions like UPPER().
+                </li>
+                <li>
+                    Most of my learning so far has been about SELECT, and goodness, it's powerful. Subqueries, all the different ways to filter like WHERE and GROUP BY and HAVING, the control you have with your client result via ORDER BY, it's amazing! I was thinking about my use case
+                    throughout the process of doing the provided exercises, and I don't think I'll immediately need a lot of the more involved language features, but as the game scales and needs emerge for stranger and stranger queries, I feel very supported by my options. Plus one to choosing SQL!
+                </li>
+                <li>
+                    I wrote a little rhyme to help remember the actual runtime execution order of a SELECT, since the order it's written in is different. <u>"FROM WHERE I stand, I'll GROUP BY quarter, HAVING some time to SELECT my ORDER."</u> I love a good mnemonic.
+                </li>
+                <li>
+                    I also got some pointers on INSERT, UPDATE, and DELETE, as well as all the basics of CREATE that I needed to build my first ever table!
+                </li>
+                <li>
+                    A schema is essentially a table container. For example, a FIEA schema (my graduate program) might contain the tables FIEA.Students and FIEA.Faculty. It was nice to shed some light on that bit of structure since I didn't really know the difference before.
+                </li>
+            </ul>
+        </p>
+        <p>
+            Here's my proof of completion! I have no idea what my Microsoft XP gets me, but I'm level 4 now, and feel more powerful than I did at level 1. Maybe that's the system working!
+            <img class="image" src="../images/devlogs/oddquatic/SQLTutorial.png" alt="An image of my completion certificate." style="width:1000px; height:200px">
+        </p>
+        <p>
+            So now I have a basic understanding of both PHP and SQL syntax. I created OddQuatic's first table in my Azure SQL database using the query editor, and I feel ready to tackle the challenge this has all been leading up to: connecting dbo.Fish to OddQuatic.exe.
+            I have an example of the PHP necessary; here's a current map of my understanding and questions.
+            <img class="image" src="../images/devlogs/oddquatic/CodeAnalysis1.png" alt="An image of my completion certificate." style="width:650px; height:600px">
+        </p>
+        <p>
+            The main things I need answers for to succeed in my first great task are
+            <ul>
+                <li>
+                    "What is a PDO, and why am I using it?,"
+                </li>
+                <li>
+                    "Where does this PHP code even go?," and
+                </li>
+                <li>
+                    "I can read and write JSON to a NoSQL database decently well on the Unity side, but how do I insert and fetch information from a SQL database using Unity?"
+                </li>
+            </ul>
+        </p>
+        <p>
+            I intend to find those answers, understand them, and bend their power to my will, all in order to put a fish in a video game using the Internet. I love game development!
+        </p>
+        <p>
+            <i>- Andrew</i>
+        </p>
+        <ul>
+            <li><u><a href="https://learn.microsoft.com/en-us/training/paths/get-started-querying-with-transact-sql/" target="_blank">MS T-SQL Tutorial</a></u></li>
+            <li><u><a href="https://sqlserverguides.com/sql-server-functions-vs-stored-procedures/" target="_blank">Server Functions And Stored Procedures</a></u></li>
         </ul>
     </div>
 
