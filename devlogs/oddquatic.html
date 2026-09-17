@@ -44,7 +44,7 @@
 
     <!--High-value intel-->
 
-    <img class="image" src="../images/devlogs/oddquatic/Thumbnail1.png" alt="A picture of the most recent update to OddQuatic." style="width:800px; height:500px">
+    <img class="image" src="../images/devlogs/oddquatic/Thumbnail2.png" alt="A picture of the most recent update to OddQuatic." style="width:1000px; height:500px">
     <div class="paddingblock"></div>
 
     <div class="about">
@@ -69,6 +69,7 @@
             <li><a href="../devlogs/oddquatic.html#jump3" target="_self" style="">Choosing An Engine Based On My Criteria - Servers and Databases</a></li>
             <li><a href="../devlogs/oddquatic.html#jump4" target="_self" style="">My Introduction To PHP</a></li>
             <li><a href="../devlogs/oddquatic.html#jump5" target="_self" style="">My Introduction To T-SQL</a></li>
+            <li><a href="../devlogs/oddquatic.html#jump6" target="_self" style="">Engineering Process - Connecting Unity To Azure SQL</a></li>
             <li><a href="../devlogs/oddquatic.html#jump99" target="_self" style="">???</a></li>
         </ol>
     </div>
@@ -625,6 +626,181 @@
 
     <div class="paddingblock"></div>
 
+
+    <!--Entry 7-->
+    <div class="about">
+        <h2 class="merriweather" style="text-align: left; padding: 0px 70px;" id="jump6"><u>Engineering Process - Connecting Unity To Azure SQL</u></h2>
+        <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>9/17/26</i></h4>
+        <p>
+            A post that's been a long time coming! This entire process took me around 17 hours - just a bit over 2 full, nonstop work days, spread out over maybe 5 or 6 actual days. This post is going to cover every step I took to get OddQuatic accessing my Azure SQL database using both totally online and locally hosted methods. I'll be providing my references,
+            explaining each step I took along way, and noting places where my understanding improved or still has further to go.
+        </p>
+        <p>
+            I started by asking where I could host my PHP code online - I knew it needed to be accessible via the internet. Very quickly, this led to needing to set up a web application; somewhere that could host the code and be queried by Unity. I found <u><a href="https://docs.azure.cn/en-us/mysql/flexible-server/tutorial-simple-php-mysql-app" target="_blank">a few</a></u>
+            <u><a href="https://learn.microsoft.com/en-us/azure/app-service/tutorial-php-mysql-app?pivots=azure-portal" target="_blank"> official Microsoft tutorials, </a></u>but both of them quickly felt overcomplicated. One dealt with directly linking a web app to a MySQL server, but didn't provide a clear path to connecting with an existing database, and the other involved Redis and Laravel, additional
+            components that may be useful, but didn't match with my understanding of the minimum viable product I was trying to create. The latter tutorial also included a large premade GitHub repo as a starter template, and pushed me further towards the idea of finding a simpler solution and not taking on architecture or features needlessly.
+        </p>
+        <p>
+            <u><a href="https://docs.azure.cn/en-us/mysql/flexible-server/connect-php?tabs=windows%2Cprocedural-create-table%2Cprocedural-insert%2Cprocedural-read%2Cprocedural-update%2Cprocedural-delete" target="_blank"> This </a></u> tutorial provided me with my first forward vector, providing samples of code that could be deployed to perform specific SQL functions - CREATE, INSERT, SELECT, and so on.
+            The first step it outlined was installing PHP - so, that's what I did. What followed was a sequence of me <u><a href="https://www.php.net/downloads.php?os=windows#php-7.1" target="_blank"> downloading binaries, </a></u> <u><a href="https://www.php.net/downloads.php?os=windows#php-7.1" target="_blank"> actually installing PHP, </a></u>
+            <u><a href="https://www.geeksforgeeks.org/php/how-to-execute-php-code-using-command-line/ " target="_blank"> and verifying the installation with a simple Hello, World. </a></u> For this test, I used latest stable, which at the time was PHP 8.5. I wanted to use a version that was well-supported in case I had any issues, and the latest LTS version of anything is usually quite good at that.
+            I did also do a little poking around, and found that the major differences from PHP 7, which one could argue has been around for longer and might have better documentation, are mostly <u><a href="https://www.liquidweb.com/blog/php-7-vs-php-8/" target="_blank"> a few new functions and an improvement in performance. </a></u> So, old docs should still have me covered, and I won't turn down free performance.
+        <p>
+            Great! I can run PHP code locally via my terminal. My next step was taking the code from the PHP tutorial I liked and trying to run it - I used their example for retrieving information from a database, modifying it only to match my names and parameters. The original code is shown below.
+            <img class="image" src="../images/devlogs/oddquatic/EngineeringProcessOne/one.png" alt="An image of SQLI connection code." style="width:750px; height:550px">
+        </p>
+        <p>
+            Naturally, this resulted in an error. Specifically, the sqli library being used wasn't getting recognized. I searched for the <u><a href="https://www.php.net/manual/en/mysqli.installation.php" target="_blank"> library</a></u> and <u><a href="https://stackoverflow.com/questions/25281467/fatal-error-call-to-undefined-function-mysqli-connect" target="_blank"> error message</a></u> and learned some crucial PHP knowledge - each install needs to have its .ini configured to tell it what libraries it's using, and if you want to use a library that it doesn't ship with by default, you need to download and emplace the .dll's for that library
+            from their official source into your PHP install.
+        </p>
+        <p>
+            Awesome! I edit both of the .ini files in my install, labeled production and development, then put my .dll's in place and try again. Still no dice. I go back to researching and find out that the two files aren't both used situationally - PHP wants to you to copy one and retype it to just .ini, making it the one source of truth for configuration. Between the two, <u><a href="https://stackoverflow.com/questions/6880749/php-ini-production-vs-development" target="_blank">PHP's own installation file</a></u> recommends production,
+            as the default settings are optimized for performance and security. That's enough for me - I noted that the .ini is something that can affect performance and security in the event that I need to analyze my full pipeline in respect to either of them, and move on.
+        </p>
+        <p>
+            Now, my errors were different, and for a little while, I was in the weeds debugging connectivity errors instead of syntax ones. I consistenly got <u><a href="https://stackoverflow.com/questions/12758727/a-connection-attempt-failed-because-the-connected-party-did-not-properly-respond" target="_blank">this</a></u> error and variations thereupon; no matter what information I used or what permutation of the tutorial parameters I tried, I couldn't get anything through.
+            I looked into the <u><a href="https://learn.microsoft.com/en-us/azure/azure-sql/database/serverless-tier-auto-pause-resume?view=azuresql" target="_blank">conditions that need to be met for my database server to be online</a></u> to be sure I wasn't running into a brick wall, but everything was sound on that side of the equation.
+        </p>
+        <p>
+            With little recourse left for solving my issues with the method I was using to try and connect, I switched gears, digging into Microsoft's documentation again until I found what appeared to be a <u><a href="https://learn.microsoft.com/en-us/azure/azure-sql/database/connect-query-php?view=azuresql" target="_blank">much simpler tutorial</a></u>. Its template code for connecting looked like this:
+            <img class="image" src="../images/devlogs/oddquatic/EngineeringProcessOne/two.png" alt="An image of SQLSRV connection and query code." style="width:750px; height:550px">
+        </p>
+        <p>
+            Now using sqlsrv instead of sqli as my connection library, I followed the <u><a href="https://serverfault.com/questions/1088947/php-unable-to-identify-sqlsrv-connect-function-while-trying-to-connect-sql-ser " target="_blank">same</a></u> <u><a href="https://learn.microsoft.com/en-us/sql/connect/php/download-drivers-php-sql-server?view=sql-server-ver17 " target="_blank">steps</a></u> as before to get the library up and running.
+            This switch prompted another investigation - what's even the difference between the two extensions? <u><a href="https://www.jainya.com/php-connect-to-sql-comparison/" target="_blank">The answer</a></u> seems to be that the MySQL extension is widely supported and great for websites, but limited in features useful to enterprise-level operations, where as SQLSRV
+            excels at enterprise and security, but is limited in the kinds of SQL databases it can connect to. SQLSRV is actually a Microsoft product, so I was happy to learn that my continued efforts had led me to the best tool for the specific job I was doing within the Microsoft Azure ecosystem.
+        </p>
+        <p>
+            This was also where I learned what a PDO is - a PHP Data Object. It's just another protocol that one can use when connecting to a server. It's actually a more generic extension that helps organize your connectivity into an object-oriented format, and then that can be used in conjunction with multiple database systems - great for versatility. Perhaps a layer I might add in the future?
+        </p>
+        <p>
+            But once again, the extension is now up and running, and I get a connectivity error - but this time, I'm able to figure out that I'm not ever correctly <u><a href="https://stackoverflow.com/questions/58836603/sqlsrv-query-expects-parameter-1" target="_blank">error checking my connection to the server.</a></u> A little error vaidation shows me the next step; I can't log in to my server because "Azure Active Directory only authentication is enabled."
+            I need to contact my system administrator, and luckily, he's me!  <u><a href="https://stackoverflow.com/questions/74468353/why-i-am-i-getting-only-azure-active-direcoty-authintication-is-enabled-when-try " target="_blank">Even</a></u> <u><a href="https://learn.microsoft.com/en-us/azure/azure-sql/database/authentication-azure-ad-only-authentication?view=azuresql&tabs=azure-cli" target="_blank">more</a></u> research lead me to the final fix: I had been using Microsoft Entra authentication to be able to
+            easily sign into my database with my email and use the query editor for testing, but that login information couldn't be used by my server code. By transitioning the login to an actual username and password, I was finally able to see this:
+            <img class="image" src="../images/devlogs/oddquatic/EngineeringProcessOne/four.png" alt="An image of a successful database query in a CLI." style="width:350px; height:80px">
+        </p>
+        <p>
+            I have code that can connect to my server! It was so reinvogirating to reach that victory that I just kept pushing. It's going to be a long post - we're about halfway. My next step was to figure out how to host my new code and circle back around to the question of a web server. Re-attacking the problem armed with more knowledge about what needed to actually be on my server gave me a fresh
+            set of eyes, and led me to <u><a href="https://stackoverflow.com/questions/58836603/sqlsrv-query-expects-parameter-1" target="_blank">this video</a></u> explaining how to create the simplest possible Azure web app. It worked a treat, and I made my first deploy of another Hello, World script to ensure everything was in order.
+        </p>
+        <p>
+            Dear reader, everything was not in order. The solution here was quick, though, and only had one false start when I looked into why the Azure web app logs kept talking about robots in a repeating 404 message. <u><a href="https://stackoverflow.com/questions/77921307/getting-a-404-for-get-robots933456-txt" target="_blank">(It's a health check!)</a></u>
+            The official PHP docs set me straight on my syntax, as my problem came from not having any Intellisense catching a few rookie mistakes; in no time at all, I had a working hello.
+        </p>
+        <p>
+            With a working web app and the ability to write PHP that could get data, I returned to the <u><a href="https://stackoverflow.com/questions/39140068/how-to-connect-to-database-from-unity" target="_blank">best Unity/database intersection example</a></u> I had and re-read it with my new knowledge. Among the C# and PHP code was a note that my web app needed to have a cross-domain policy, or Unity would refuse to attempt any kind of connection. I had no idea what that was and wasn't about to copy
+            paste the provided code into a .xml without a care, so I did a little research - get ready for a bulleted sidebar from the main conversation!
+            <ul>
+                <li>
+                    I watched <u><a href="https://stackoverflow.com/questions/39140068/how-to-connect-to-database-from-unity" target="_blank">this video</a></u> to get a sense for what I was dealing with in layman's terms
+                </li>
+                <li>
+                    A cross-domain policy is essentially how you define your cross-domain solution, and a cross-domain solution governs how you santitize and deliver information between domains of low and high trust
+                </li>
+                <li>
+                    You should be considering or using a cross-domain solution any time you're using data from sources you can't verify. Thus, it's a good idea here, as not only does Unity by default not trust wherever it's connecting to without one, but users will be inputting data that needs to be treated with skepticism before being placed into my database
+                </li>
+                <li>
+                    That said, the recommended policy in the resource I linked is just about the most lenient possible, existing mostly to satisfy Unity and allow it to connect.
+                </li>
+            </ul>
+        </p>
+        <p>
+            While there's potential in the future to expand my CDS into something that actually benefits me, I'm treating it as a stepping stone for the time being; as you'll see in a minute, I have multiple reasons to do a larger cybersecurity-based evaluation of my project in the future.
+        </p>
+        <p>
+            Then, finally, came the moment to put everything together. Using the code from the above resource as reference, I deployed PHP to the server via GitHub to allow me to SELECT every fish in my database, and refactored my old prototype code in Unity to connect to my new database. Most of the references online for Unity web connection don't use the most updated version
+            of Unity's library for it (WWW) so it was a great exercise taking depricated code, bringing it up to a modern standard, and then modifying it to my own ends. As expected, there were some hitches along the way - I had to figure out <u><a href="https://learn.microsoft.com/en-us/answers/questions/5536554/his-policy-maintains-a-set-of-best-available-regio" target="_blank">which regional servers I was allowed to use with my Azure for Students account,</a></u>
+            toggled the option that let me <u><a href="https://stackoverflow.com/questions/76419541/how-to-solve-azure-web-app-deployment-unauthorized-code-401" target="_blank">actually continue deploying code to the server,</a></u> and of course, more syntactical fumbles. There's no better way to learn a language than by trying to do something weird and quickly failing a lot!
+        </p>
+        <p>
+            With everything in place came the next major success of the week - a fish, populated into Unity via a fully online process.
+            <img class="image" src="../images/devlogs/oddquatic/EngineeringProcessOne/five.png" alt="An image of a single fish in an Odd ocean." style="width:700px; height:400px">
+        </p>
+        <p>
+            This was wonderful, but also only half of the equation; now, I needed to INSERT fish into my database using user input in Unity. The resource I was using implemented a basic encryption algorithm for some additional data protection, and once again I found myself unfamiliar...until my second bulleted sidebar!
+            <ul>
+                <li>
+                    The example I was using used MD5 encryption, which <u><a href="https://www.geeksforgeeks.org/computer-networks/what-is-the-md5-algorithm/" target="_blank">this site explained to me</a></u>
+                </li>
+                <li>
+                    MD5 encryption can take an input message of any length and change it into a fixed-length message of 16 bytes, which seems magical
+                </li>
+                <li>
+                    It's a solid algorithm, especially as a starting point for my cybersecurity journey, but it has some issues that mean it's not the modern standard. Namely for me, in a large database, hash collisions are possible, and I'd like to avoid losing user info to identical encryptions
+                </li>
+                <li>
+                    This started me down a whole road of cybersecurity research, learning the difference between a symmetric and <u><a href="https://www.geeksforgeeks.org/computer-networks/what-is-asymmetric-encryption/" target="_blank">asymmetric</a></u> algorithm, and I made the decision to stop running down this particular rabbit hole in the interest of time and prioritization
+                </li>
+            </ul>
+        </p>
+        <p>
+            A thorough cybersecurity review is definitely on the books for the future. From what I gather, it's something that's definitely best to do as you go rather than just "adding cybersecurity," so I'm happy that these little nuggets have been sprinkled into my project already. I knew this little project would lead me to some big new places, and it's so exciting to see them on the road ahead.
+            I'm glad I kept the content scope reasonable.
+        </p>
+        <p>
+            The actual usage of the MD5 algorithm in my project right now is very interesting - it's not being used to hide information, but rather to validate that the user and server are allowed to know each other. I made this handy diagram to explain the process!
+            <img class="image" src="../images/devlogs/oddquatic/EngineeringProcessOne/six.png" alt="An image of a single fish in an Odd ocean." style="width:1000px; height:270px">
+        </p>
+        <p>
+            With that gap in understanding filled in a little and marked with some yellow hazard tape, I continued on my journey towards being able to add a fish to my database from a Unity build. For the sake of brevity, here's a list of every obstacle I faced along the way.
+            <ul>
+                <li>
+                    PHP syntax and formatting errors in regards to how I access the data that Unity has sent to the server via POST (like fish name), which I solved with the help of the Azure web app live logs, and which I would like my IDE to help me with more in the future
+                </li>
+                <li>
+                    Unity-side JSON deserialization errors that saw me use the debugger to step through my code and ultimately just came down to a specific JSON format that isn’t documented as far as I can tell (to GET my data in a JSON format, it needed to be wrapped in square brackets, not a complete JSON object containing an array)
+                </li>
+                <li>
+                    I didn't know the difference between GET and POST until this point, but it just comes down to GET being a pure request to the server, while POST gives the server information that contextualizes the request
+                </li>
+                <li>
+                    Once again, there was no one example that gave me the answer I needed for the Unity-side code, so I had a lot of fun <u><a href="https://stackoverflow.com/questions/68344515/problems-writing-a-unitywebrequest-post" target="_blank">troubleshooting</a></u> and
+                    <u><a href="https://docs.unity3d.com/ScriptReference/WWWForm.html" target="_blank">updating</a></u> old syntax to become new, and general code to become custom. The WWWForm objecti n particular saved me a headache trying to build a string object that my server would accept as POST information.
+                </li>
+            </ul>
+        </p>
+        <p>
+            On the other side of those troubles, OddQuatic was now looking like this, with nearly all of the fish having been added inside Unity:
+            <img class="image" src="../images/devlogs/oddquatic/EngineeringProcessOne/seven.png" alt="An image of multiple fish in an Odd ocean." style="width:600px; height:270px">
+        </p>
+        <p>
+            The basic UI I set up to add fish to the database was once again working, two weeks after being disconnected from MongoDB.
+        </p>
+        <p>
+            That's <i>almost</i> everything in this database journey, but for an epilogue, there were a few things I wanted to do. One was actually set up a localhost to test from to keep operational costs down; I went the long way round doing all the online components first, but the experience was so educational that I can't really complain. (That said, I'll not be doing it that way again.)
+            It quickly became clear that things wouldn't be as simple as just putting a line in an existing PHP script telling it to run on localhost:8000. Eventually, nosing around led me to XAMPP (XAMPP: Apache, MySQL, PHP, Perl; yes, that's right, a recursive acronym that <i>contains a recursive backronym</i>). XAMPP is essentially an all-in-one web server dev kit, with a core based on
+            <u><a href="https://www.youtube.com/watch?v=kaaenHXO4t4" target="_blank">Apache</a></u>, itself evidently the coolest open source HTTP web server core this side of the solar system. Most importantly for me, it's only a single button click to turn on a localhost and see my PHP code on my local network. With the charming rule-of-three reappearance of having to configure a PHP .ini file (this time for the
+            new install that came with XAMPP),
+            I was up and running again, and in short order added a toggle to the Unity side of things for effortless swapping between local and online servers.
+        </p>
+        <p>
+            That's a lot in one post, and I'm so very proud of what I accomplished. But in the tradition of great entertainers, I do have one more thing.
+            <img class="image" src="../images/devlogs/oddquatic/Thumbnail2.png" alt="A picture of the most recent update to OddQuatic." style="width:1000px; height:500px">
+        </p>
+        <p>
+            Out of curiosity, I tried my first mobile build and deployed it to a test Android - any everything went off without a hitch. I assumed this would be the case; so long as the device can connect to the internet, the protocols are the same. Still, it felt amazing to see the product as intended for the very first time. For fun, I added a few new fish and gave them some actual motion;
+            after the long work of getting the backend set up, the content additions to the frontend only took about 20 minutes.
+        </p>
+        <p>
+            Next, I need to prove that mobile builds can work on my other major target platform of iOS, so I'll be looking into Unity's Cloud Build service since I don't have an Apple build machine available. Time to set up some build automation!
+        </p>
+        <p>
+            <i>- Andrew</i>
+        </p>
+    </div>
+
+    <div class="paddingblock"></div>
+
+    <!--Entry 8-->
+    <div class="about">
+        <h2 class="merriweather" style="text-align: left; padding: 0px 70px;" id="jump7"><u>Coming Soon...</u></h2>
+        <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>9/???/26</i></h4>
+        <p>
+        </p>
+    </div>
+
+    <div class="paddingblock"></div>
 
     <!--
 
