@@ -70,6 +70,9 @@
             <li><a href="../devlogs/oddquatic.html#jump4" target="_self" style="">My Introduction To PHP</a></li>
             <li><a href="../devlogs/oddquatic.html#jump5" target="_self" style="">My Introduction To T-SQL</a></li>
             <li><a href="../devlogs/oddquatic.html#jump6" target="_self" style="">Engineering Process - Connecting Unity To Azure SQL</a></li>
+            <li><a href="../devlogs/oddquatic.html#jump7" target="_self" style="">My Introduction To Gameplay Networking</a></li>
+            <li><a href="../devlogs/oddquatic.html#jump8" target="_self" style="">Refactoring For Unique Users</a></li>
+            <li><a href="../devlogs/oddquatic.html#jump9" target="_self" style="">Refactoring For Full Server Authority</a></li>
             <li><a href="../devlogs/oddquatic.html#jump99" target="_self" style="">???</a></li>
         </ol>
     </div>
@@ -794,24 +797,223 @@
 
     <!--Entry 8-->
     <div class="about">
-        <h2 class="merriweather" style="text-align: left; padding: 0px 70px;" id="jump7"><u>Coming Soon...</u></h2>
-        <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>9/???/26</i></h4>
+        <h2 class="merriweather" style="text-align: left; padding: 0px 70px;" id="jump7"><u>My Introduction to Gameplay Networking</u></h2>
+        <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>9/28/26</i></h4>
         <p>
+            It's a beautiful Monday morning - indulge me in a little chapter-based humor today before we begin in earnest.
+        </p>
+        <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>Chapter 1: How I Networked OddQuatic Using The Power of Playfab</i></h4>
+        <p>
+            My first step in networking OddQuatic with Playfab was realizing that it was impossible to network OddQuatic with Playfab alone.
+        </p>
+        <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>Chapter 2: How I Networked OddQuatic Using The Power of Even More Fish</i></h4>
+        <p>
+            There we go, a stage properly set.
+        </p>
+        <p>
+            All comedy emerges from a nuggest of truth, and in this case, it's a full lump. But first, a note - my attempts to set up build automation for iOS failed spectacularly and quickly. I have no regular access to a Mac development environment, and as it turns out, nor do my
+            current facilities at FIEA and UCF. FIEA also lacks an Apple Developer Account for student usage, and without a set of files that one is given as an Apple Developer, Unity's Cloud Build service cannot build an iOS application. Blocked at every turn, I searched across
+            central and downtown Orlando, eventually finding that the local lobrary branch had Macs with Unity installed. I then travelled there by bus, only to find that THOSE Macs lacked XCode - which is necessary for building iOS applications. Until further notice, OddQuatic is
+            Android-exclusive (the further notice being myself coming into $100, a Mac, or notice that the library has responded to my request to update their facilities). Here's a picture of me running OddQuatic on a Mac to bookend the adventure!
+            <img class="image" src="../images/devlogs/oddquatic/EngineeringProcessOne/AndrewLibrary.jpg" alt="An image of multiple fish in an Odd ocean." style="width:600px; height:450px">
+        </p>
+        <p>
+            So, with hopes for an iOS release dashed, I moved on to networking the game: Being able to have a server, and clients, and have fish spawned on one client move to another client and back again. I assumed that the natrual place to start for this was Playfab, and so looked into
+            how to upload a build of my game to the service. This rapidly became confusing; Microsoft has a lot of documentation with slight variations on this premise. The core of what I learned, though, was the PlayFab was my end goal: The game needs to be able to have fully functional local
+            connectivity using a client/server model, and Playfab represents the final step in the networking process (online connectivity and cloud hosting). So I turned my focus back to Unity, and started looking into how to get local networking set up.
+        </p>
+        <p>
+            Before starting this project, I had some familiarity with Unity Netcode for GameObjects (NGO), and began my research there. NGO is Unity's in-house, engine-compatible networking framework for peer-to-peer and client/server networking. However, during my PlayFab research, I came across something called Mirror -
+            and my eyes were open to the true scale of the decsion I was making. There are, in fact, 4 major networking frameworks that support Unity development! I'm going to do a quick overview of what I learned about each of them, and what ultimately mvoed my hand for my final decision. This is a shorter analysis than some of
+            my foundational tech stack pieces despite its importance primarily because the choice came down to about 30% of what each framework does - the other 70% was functionally the same betwixt my options.
+        </p>
+        <p>
+            <ul>
+                <li>
+                    <b>Unity NGO:</b> The baseline. The benefits with NGO are that it's developed concurrently with the engine itself, ensuring maximum compatability, and that its design enforces a client/server architecture. Other frameworks give you the freedom to accidentally stumble into
+                    a client-authoritative design pattern, but not NGO. The downsides are that it appears to be most suited for small scale (2-10 player) experiences, and not the massive multiplayer ocean I'm dreaming of. Unity's documentation also appears to be the extent of the help I'll get outside of forums and YouTube.
+                </li>
+                <li>
+                    <b>Mirror:</b> A 'what-if' of Unity continuing development on their old UNet system pre-NGO, powered by an open source community. While it advertises being up to date, my brief research couldn't find much new past 2022. However, I found
+                    a great tutorial series utilizing it that's somewhat modern, so it's still enough of a contender.
+                </li>
+                <li><b>Photon:</b> The big guns - a 3rd party solution with a workforce and server power behind it. Photon highlights being used as the durable network layer of massive games like Peak and Among Us VR, and offers price-tiered options for different clientele.</li>
+                <li>
+                    <b>FishNet:</b> The 'underdog' of the bunch. I came across FishNet while researching the other 3 options, as the creator was advertising it in relevant forum posts. Its documentation highlights its performant nature under high stress, specifically in
+                    comparison to Mirror.
+                </li>
+            </ul>
+        </p>
+        <p>
+            I ultimately went with <b>FishNet</b> - and not (just) for the relevant name. It's designed to be server-authoritative by default like NGO, the development community surrounding it is large and active (I'm in their Discord now!),
+            and the developers have promised free and stable LTS versions for the foreseeable future. Their high-level API and thorough documentation also made it by far the most user friendly for me personally. It's a solution I feel comfortable using
+            and I can be secure in knowing it will keep pace with modern technology for free.
+        </p>
+        <p>
+            Once I chose FishNet, I downloaded it from the Unity Asset Store and got to work! The first thing I did was follow a few short tutorials outside of my game's context - just writing the simplest connection scripts possible and verifying that
+            they worked with multiple local instances. FishNet's learning resources are also great, and I'd recommend them to beginners regardless of if you want to stick with the framework or not. Some of it was familiar from my time with Unity NGO;
+            throughout the process of my first implementation, I felt like I was writing similar processes to the last project I used NGO on, just with less friction. I suppose that's repetition for you, but I definitely credit the framework with being
+            easy to use as well.
+        </p>
+        <p>
+            Through the documentation, and some trial and error, I was able to use basic networking principles to take my moving fish and send them, at long last, from screen to screen with multiple instances running on a single machine. The process I created is as follows:
+            <ul>
+                <li>
+                    ClientSQL.cs contacts the database server and retrieves the fish on bootup.
+                </li>
+                <li>
+                    Client fish swim across the screen, and when they reach a certain coordinate, they send the data that composes them to the server via a remote procedure call to the server.
+                </li>
+                <li>
+                    That server RPC is defined in FishBus.cs, a networked singleton that I created to act as the center of communication between all clients and the server.
+                </li>
+                <li>
+                    The server takes in the data and the identity of whichever client called the function, and then finds the sequentially next user in FishNet's ServerManager.Clients list. The server then uses the connection data of the new user to call
+                    a target RPC - code that the server executes on a single, specified client.
+                </li>
+                <li>
+                    That client has a new fish spawned on it, which will then travel across the screen, and repeat the loop.
+                </li>
+            </ul>
+        </p>
+        <p>
+            The most interesting problem I encountered was initialization order. I was stumped on how to properly route a user's request for their initial fish through the server, as calling it in any form on initialization of the bare-bones networked
+            Player script kept returning warnings and errors about how either the client or server was uninitialized. FishNet's documentation actually has a troubleshooting section for just the errors I was encountering, and that
+            led me to a breakdown of some of their custom onInit and onDeinit methods. I was able to move client fish-request logic <i>into FishBus.cs</i> using FishNet's "OnStartClient" method, which will run every time that a given network object
+            becomes visible/initialized to a client. So, whenever a client logs on now, FishBus's OnStartClient runs for them, and their fish are fetched via the server!
+        </p>
+        <p>
+            Though the scale of this exercise is comparatively small, it was a great introduction to FishNet and successfully creating a networked feature. I feel much more confident in network programming and some of the order of operations that goes into
+            running code via server and client. My solution isn't perfect, but it's a great start! There are two concerns I'll need to address in the future. One is that if a client disconnects, any fish on their machine are lost to the aether. Especially in sudden
+            cases like unexpected crashes, I have no way to keep any fish that should stay moving...moving. The other is the one I've chosen to address first - every client will call down the entire fish database every time they open the game. I currently have
+            no way to distinguish which user made which fish - and that means it's time for a user account system.
+        </p>
+        <p>
+            <i>- Andrew</i>
+        </p>
+        <ul>
+            <li><u><a href="https://www.youtube.com/watch?v=3yuBOB3VrCk&t=2192s" target="_blank">Netcode for GameObjects tutorial</a></u></li>
+            <li><u><a href="https://www.youtube.com/watch?v=8VVgIjWBXks&t=828s" target="_blank">Mirror tutorial</a></u></li>
+            <li><u><a href="https://uversedigital.com/blog/unity-netcode-vs-mirror-vs-photon/" target="_blank">NGO v. Mirror v. Photon</a></u></li>
+            <li><u><a href="https://fish-networking.gitbook.io/docs" target="_blank">FishNet docs</a></u></li>
+            <li><u><a href="https://fish-networking.gitbook.io/docs/tutorials/getting-started/getting-connected" target="_blank">FishNet starter tutorial 1</a></u></li>
+            <li><u><a href="https://fish-networking.gitbook.io/docs/tutorials/getting-started/preparing-your-player" target="_blank">FishNet starter tutorial 2</a></u></li>
+        </ul>
+    </div>
+
+    <div class="paddingblock"></div>
+
+    <!--Entry 9-->
+    <div class="about">
+        <h2 class="merriweather" style="text-align: left; padding: 0px 70px;" id="jump8"><u>Refactoring For Unique Users</u></h2>
+        <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>9/30/26</i></h4>
+        <p>
+            User accounts are something that I wanted in this phase of OddQuatic's development at a basic level - just the ability to enter a username on a title screen, and have all the fish that only you've made spawn on your client and move out
+            into the world from there. I had originally scoped their implementation for after dedicated servers went up, but moved them up to before I get PlayFab working for ease of testing. As my fish database gets larger and larger,
+            I thought it would be good to have a versatile way to apply a razor to the active fish I have around, and accounts solve that problem!
+        </p>
+        <p>
+            I opted to create a very simple account system all on my own, with a few key features for the future. PlayFab and Unity Online Services both offer managed accounts systems as part of their services, but my goal wasn't to build the system
+            I'll use forever - just to understand the fundamentals of the system I'll eventually use, whatever it is.
+        </p>
+        <p>
+            The first thing I did was set up a new schema in my database for a Users table. Each User has a primary key representing their user ID, a username for them to log in with, and, just in case, an integer representing the amount of in-game
+            currency they have. I'd like to set up player economy much later down the line, so I figured I would help my future self out. The user ID lets me ensure that every user has a totally unique way to distinguish them from everyone else,
+            and the username gives the user a memorable piece of information tied to their account.
+        </p>
+        <p>
+            This is one of the first major tasks I've done where I didn't need to learn any new software or language - just put into practice all the tools and knowledge I'd built up over the course of the project.
+            <ol>
+                <li>
+                    I started by adding a new column to my Fish table and marking it as a foreign key column for the UserID column in the Users table - now each fish was associated with a user. I did clear out the original database of fish - no longer
+                    do those first 40 swim in the ocean of odd.
+                </li>
+                <li>
+                    Next, I wrote and validated locally a new PHP script for querying my SQL database with a username and returning every fish associated with the user ID associated with that username. Hurray for subqueries!
+                </li>
+                <li>
+                    Once I had a working PHP script, I moved on to Unity development. I spent some time creating a custom interface for logging in, which included setting up my own client/server login logic as I had previously been using FishNet's
+                    default prefab to set builds to be a client or server. The end result turned out pretty nice - clear and highly functional with a little color thrown in! Still, updating it later will be nice.
+                    <div class="paddingblock"></div>
+                    <img class="image" src="../images/devlogs/oddquatic/Login1.png" alt="An image of OddQuatic's first login page." style="width:800px; height:400px">
+                    <img class="image" src="../images/devlogs/oddquatic/Login2.png" alt="An image of OddQuatic's 'I'm the server application' page." style="width:800px; height:400px">
+                </li>
+                <li>
+                    Passing the username to the web app required a new method in ClientSQL, as well as the deprecation of GetAllFish as a method. There won't ever be a need for anyone to see every fish in the database, at least not in the next 6 months,
+                    and I don't want to leave the pattern lying around for me to rely on as a substitution for making a more targeted query.
+                </li>
+                <li>
+                    Now I could type in a username, and get fish associated with it in the database! But I didn't have anyway to actually generate fish associated with a user ID within the context of the game - all my data had been set up in Azure's query
+                    editor.
+                </li>
+                <li>
+                    So, I updated the Fish class used to deserialize fish information from JSON and store it in game to have a userID field, and added a place in all of my fish creation methods to pass that value in. But my problem persisted, as I hadn't
+                    been storing off the user ID associated with a logged-in user.
+                </li>
+                <li>
+                    I created the tried-and-true local GameManager singleton to store user information while a client is online - now, when the username is given to the query for a user's fish, it's stored in the GameManager, and when the user's fish
+                    are retrieved, the user ID is taken from the fish data and given to the GameManager as well.
+                </li>
+                <li>
+                    Finally, I updated the C# and PHP scripts dealing with sending a created fish to the server, so that they carry the user ID and will create a fish in the database such that it's associated with a user. This was also the point where
+                    I finally addressed one of my older issues: I had been deleting every fish on the client each time they created a new one and just calling GetAll to make sure the new fish was included, a procedure I replaced with a new full-stack sequence
+                    of methods that retrieve the last fish a given user has made by selecting and returning the fish of that user that has the highest FishID.
+                </li>
+            </ol>
+        </p>
+        <p>
+            Now, I have a game with a fully-functional, if basic, account system, with each fish tied to a user. Just a few notes before I wrap up:
+            <ul>
+                I don't like the way I'm getting the user ID and have noted it for future amendment. I'm sending the same user ID number over the internet with every single one of a user's fish - that's repeated, useless data that I only need to fetch once.
+                It's not breaking anything, but it's inefficient.
+            </ul>
+            <ul>
+                I debated how safe it was for each fish to have a user ID associated with it at all times, but resolved that the information was (a) necessary for pretty much any feature involving fish-based social interaction, and (b) not compromising
+                as users have no way to use that random number to access anything even if they somehow found it out.
+            </ul>
+        </p>
+        <p>
+            My next entry will be about a fairly essential refactor regarding client and server authority - I admit to writing this post a tad retroactively, as at the actual time I finished user accounts, it wasn't something I predicted that I would
+            work on next. See you down below!
+        </p>
+        <p>
+            <i>- Andrew</i>
         </p>
     </div>
 
     <div class="paddingblock"></div>
 
-    <!--
+    <!--Entry 10-->
+    <div class="about">
+        <h2 class="merriweather" style="text-align: left; padding: 0px 70px;" id="jump9"><u>Refactoring For Full Server Authority</u></h2>
+        <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>10/8/26</i></h4>
+        <p>
+            Coming soon!
+        </p>
+<!--        <p>
+            With a basic user system complete, I was ready to move on to setting up an online dedicated server, but first, I had a presentation to give to some of my peers and mentors. In it, I presented this architecture diagram of the project so far.
 
+        </p>
+        <img class="image" src="../images/devlogs/oddquatic/Diagram2.png" alt="An image of OddQuatic's old software architecture." style="width:900px; height:650px">
+        <p>
+            It's a little blurry, but I'd like to draw your attention to the upper right. It's the part of the diagram discussing how my client-server architecture works. To give a quick refresher of what it's going over, it shows how
+            when a FishEntity (the object that represents a fish in game) despawns, it asks the server to take its information
+        </p>-->
+    </div>
 
-        <h3 class="merriweather" style="text-align: left; padding: 0px 70px;"><i><u>Databases</u></i></h3>
-        <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>Unity</i></h4>
-        <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>Unreal</i></h4>
-        <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>Godot</i></h4>
-        https://unity.com/solutions/mobile
-        https://discussions.unity.com/t/how-can-i-connect-unity-to-postgres-database/891968
-        -->
+    <div class="paddingblock"></div>
+
+    <!--Entry 12-->
+    <div class="about">
+        <h2 class="merriweather" style="text-align: left; padding: 0px 70px;" id="jump10"><u>???</u></h2>
+        <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>10/???/26</i></h4>
+        <p>
+            Coming soon-ish!
+        </p>
+    </div>
+
+    <div class="paddingblock"></div>
+
     <!--The bottom of the page ending bit-->
     <img class="banner" src="../images/buffer2.png" alt="A pixel art divider.">
 
