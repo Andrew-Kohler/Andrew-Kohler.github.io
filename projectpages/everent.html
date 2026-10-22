@@ -125,7 +125,7 @@
                             <td class="leftnew">
                                 <div style="font-size: 20px;">
                                     <p>
-                                        Coming soon - releasing this August!
+                                        Coming soon - releasing 2026!
                                     </p>
                                 </div>
                             </td>
@@ -162,7 +162,8 @@
                     <table class="modaltable">
                         <tr>
                             <td>
-                                <img class="myImg" src="../images/everent/screen1.png" alt="TEMP TODO" style="width:100%;max-width:300px">
+                                <img class="myImg" src="../images/everent/screen1.png" alt="One of my first great screenshots from the game in February. The anti-gravity is achieved via a custom gravity system on Ollie I created, which applies a gravitational force and proportional hover forces
+                                     to their board relative to the orientation of the surface they're riding / orient themselves to." style="width:100%;max-width:300px">
                                 <!-- Modal -->
                                 <div id="myModal" class="modal">
                                     <span class="close">&times;</span>
@@ -183,11 +184,13 @@
                                 </div>
                             </td>
                             <td>
-                                <img class="myImg" src="../images/beacon/screen2.png" alt="TEMP TODO" style="width:100%;max-width:300px">
+                                <img class="myImg" src="../images/everent/screen2.png" alt="An in-dev screenshot from when I was working on board fundamentals! The checkerboard pattern is my custom anti-spinout solution; on contact with any surface, it briefly and dramatically
+                                     increases the board's angular damping value, preventing Unreal's physics from taking advantage of its otherwise fast and floaty controls to send it on a one-way twister out of the map." style="width:100%;max-width:300px">
 
                             </td>
                             <td>
-                                <img class="myImg" src="../images/beacon/screen5.png" alt="TEMP TODO" style="width:100%;max-width:300px">
+                                <img class="myImg" src="../images/everent/screen3.png" alt="A shot of the final game's world in all its glory. Everent became open world as a result of our iterative design process, but succeeded as an open world thanks to my and others' efforts
+                                     to improve performance at every turn." style="width:100%;max-width:300px">
 
                             </td>
                         </tr>
@@ -271,9 +274,10 @@
                     ground navigation and air traversal via a designer-accessible system of decay constants, and created a raycast-based gravity solution to allow our Pawn player to stick to surfaces without the advantage of the CMC's tunable gravity.
                 </p>
             </div>
-            <img class="myImgBody" src="../images/beacon/code0.png" alt="TEMP TODO" style="max-width: 600px; justify-self: center; align-self: center;">
+            <img class="myImgBody" src="../images/everent/code0.png" alt="A host of the values I exposed via C++ to allow designers and programmers to easily tune movement feel. These were especially important early in development as we found our game's control identity." style="max-width: 400px; justify-self: center; align-self: center;">
             <!--Section 2-->
-            <img class="myImgBody" src="../images/beacon/code1.png" alt="TEMP TODO" style="max-width: 600px; justify-self: center; align-self: center;">
+            <img class="myImgBody" src="../images/everent/code1.png" alt="C++ code for the mentioned concavity prediction. The idea and function of the system is to look ahead via raycast and apply to the board a torque proportional to the change in angle, helping us to avoid 
+                 nose bumping associated with hard-angle transitions (such as moving along a flat surface and immediately transitioning to a 30 degree slope)." style="max-width: 600px; justify-self: center; align-self: center;">
             <div class="aboutnew" style="justify-self: center;" id="jump1">
                 <h2 class="merriweather" style="text-align:center"><u>Character Movement Details</u></h2>
                 <h5 class="merriweather" style="text-align:center; margin-top:-20px"><i>It's Cool To Sweat The Small Stuff</i></h5>
@@ -287,15 +291,20 @@
             <!--Section 3-->
             <div class="aboutnew" style="justify-self: center;" id="jump2">
                 <h2 class="merriweather" style="text-align:center"><u>Performance, Optimization, and Benchmarking</u></h2>
-                <h5 class="merriweather" style="text-align:center; margin-top:-20px"><i>TODO</i></h5>
+                <h5 class="merriweather" style="text-align:center; margin-top:-20px"><i>Checks And Balancing (On A Board)</i></h5>
                 <p>
                     Making an open world game in Unreal Engine 5 is no small task, and keeping an eye on performance has been an essential part of development. <br /><br />
-                    Y
+                    My part in the process was firstly to research emerging performance issues via Unreal Insights, and secondly to develop tooling to allow us to benchmark on different machines in a consistent fashion. Learning Unreal Insights allowed me to identify multiple
+                    performance draining aspects of the game throughout its lifetime, such as unoptimized particle effects on our wind tunnels, and pass that information through out technical art team to help them reduce the cost of those assets. It also allowed me to develop said tooling:
+                    A small series of Powershell scripts run in sequence that, using a premade build, generate framerate statistics paired with the hardware they were gathered on. The process was designed with a core philosophy of consistency and determinism to ensure the performance tests
+                    were accurate and useful.
                 </p>
             </div>
-            <img class="myImgBody" src="../images/beacon/code2.png" alt="TEMP TODO." style="max-width: 450px; justify-self: center;">
+            <img class="myImgBody" src="../images/everent/code2.png" alt="Pictured from top to bottom are the documentation for using my system (titled 'Sling'), the first batch file run, which generates the commands for the second 
+                 step and the second batch file run, which extracts raw data from Unreal Engine trace files." style="max-width: 600px; justify-self: center; align-self: center;">
             <!--Section 4-->
-            <img class="myImgBody" src="../images/everent/code3.png" alt="TEMP TODO" style="max-width: 600px; justify-self: center; align-self: center;">
+            <img class="myImgBody" src="../images/everent/code3.png" alt="An example of the logs I peeked through; here I have highlighted one of our load-related issues, where as a result of the order that the map and player respectively were being loaded,
+                 the player could find no place to spawn as it was popping in before the map." style="max-width: 600px; justify-self: center; align-self: center;">
             <div class="aboutnew" style="justify-self: center;" id="jump3">
                 <h2 class="merriweather" style="text-align:center"><u>Bug Fixing and Problem Solving</u></h2>
                 <h5 class="merriweather" style="text-align:center; margin-top:-20px"><i>Experience In Things Going Wrong</i></h5>
@@ -328,22 +337,9 @@
             <table class="nexttable">
                 <tr>
                     <td>
-                        <!--Previous-->
-                        <a href="../projectpages/pvzcpp.html" target="_self">
-                            <div class="buttonc">
-                                <h3>
-                                    <b>< Previous</b>
-                                </h3>
-                            </div>
-                        </a>
-                    </td>
-                    <td>
-                        <img class="banner" src="../images/buffersmallest.png" alt="A pixel art divider.">
-                    </td>
-                    <td>
                         <!--Next-->
 
-                        <a href="../projectpages/beacon.html" target="_self">
+                        <a href="../projectpages/pvzcpp.html" target="_self">
                             <div class="buttonc">
                                 <h3>
                                     <b>Next ></b>
