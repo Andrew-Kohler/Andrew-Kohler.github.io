@@ -74,7 +74,11 @@
                 <li><a href="../devlogs/oddquatic.html#jump7" target="_self" style="">My Introduction To Gameplay Networking</a></li>
                 <li><a href="../devlogs/oddquatic.html#jump8" target="_self" style="">Refactoring For Unique Users</a></li>
                 <li><a href="../devlogs/oddquatic.html#jump9" target="_self" style="">Refactoring For Full Server Authority</a></li>
-                <li><a href="../devlogs/oddquatic.html#jump99" target="_self" style="">???</a></li>
+                <li><a href="../devlogs/oddquatic.html#jump10" target="_self" style="">Solving An Issue - Database Heartbeat</a></li>
+                <li><a href="../devlogs/oddquatic.html#jump11" target="_self" style="">Engineering Process - Setting Up a PlayFab Server</a></li>
+                <li><a href="../devlogs/oddquatic.html#jump12" target="_self" style="">Video Log - Designing A Fish Creation System</a></li>
+<!--                <li><a href="../devlogs/oddquatic.html#jump13" target="_self" style="">Public Playtest #1</a></li>
+                <li><a href="../devlogs/oddquatic.html#jump99" target="_self" style="">???</a></li>-->
             </ol>
         </div>
 
@@ -989,29 +993,377 @@
             <h2 class="merriweather" style="text-align: left; padding: 0px 70px;" id="jump9"><u>Refactoring For Full Server Authority</u></h2>
             <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>10/8/26</i></h4>
             <p>
-                Coming soon!
-            </p>
-            <!--        <p>
-                    With a basic user system complete, I was ready to move on to setting up an online dedicated server, but first, I had a presentation to give to some of my peers and mentors. In it, I presented this architecture diagram of the project so far.
+                With a basic user system complete, I was ready to move on to setting up an online dedicated server, but first, I had a presentation to give to some of my peers and mentors. In it, I presented this architecture diagram of the project so far.
 
-                </p>
-                <img class="image" src="../images/devlogs/oddquatic/Diagram2.png" alt="An image of OddQuatic's old software architecture." style="width:900px; height:650px">
-                <p>
-                    It's a little blurry, but I'd like to draw your attention to the upper right. It's the part of the diagram discussing how my client-server architecture works. To give a quick refresher of what it's going over, it shows how
-                    when a FishEntity (the object that represents a fish in game) despawns, it asks the server to take its information
-                </p>-->
+            </p>
+            <img class="image" src="../images/devlogs/oddquatic/Diagram2.png" alt="An image of OddQuatic's old software architecture." style="width:900px; height:650px">
+            <p>
+                It's a little blurry, but I'd like to draw your attention to the upper right. It's the part of the diagram discussing how my client-server architecture works. To give a quick refresher of what it's going over, it shows how
+                when a FishEntity (the object that represents a fish in game) despawns, it asks the server to take its information and pass it on to the next user. <b>This is a client authoritative architecture!</b> Multiple people commented on this during the presentation,
+                and it was my biggest takeaway of what to fix coming out of the room.
+            </p>
+            <p>
+                Under this schema, if a user disconnects while they still have a fish, that fish will never make it to the next user. Furthermore, what qualifies as a 'disconnect' on mobile platforms becomes murky; the game will never properly close until you open the submenu with
+                all your running apps and kill it for good. This was a great catch (pun intended) to make before fully starting on PlayFab servers, and something that needed to be caught before my first dedicated server build.
+            </p>
+            <p>
+                After speaking with some of the people in the meeting, I landed on a solution I'll call 'fish loaning'. The way it works is as follows:
+                <ol>
+                    <li>
+                        When a user logs on, their fish are queried from the database like normal, but instead of only being spawned on the client, they're passed along to the server using the RPC "AddFishToServerTracking." This adds the fish to a list maintained by the server, and updates 2 other
+                        lists: activeFishReleaseTimers, which tracks how long that fish has been active on a client, and activeFishConnections, which tracks the user a fish is currently connected to.
+                    </li>
+                    <li>
+                        Every X seconds (X being a variable representing a buffer time so that the following checks don't occur every update loop), the server updates the release timer of each fish with accumulated delta time, and if it hits 0, we perform the normal bus procedures outlined above.
+                    </li>
+                    <li>
+                        A fish spawns on the client, but it's just a local game object - its job is to swim from left to right, and it deletes itself after a designated amount of time.
+                    </li>
+                </ol>
+            </p>
+            <p>
+                With this logic in place, client fish and the network are only related at the moment they spawn. While I ideated on other solutions, they ended up just being overcomplicated versions of this one - my other attempts kept returning to still needing the server to be an unstoppable force
+                of moving fish regardless of any client input. I would say the most notable of these alternate attempts is a queue system for adding and distributing the fish, and while an addition queue is still a potentially viable idea to prevent too much from happening at once,
+                a queue for spawning and checking fish just seemed like a list by another name.
+            </p>
+            <p>
+                A bug that remains is that fish are trapped in the server when a user disconnects; there's currently no check for if a user has logged off but their fish remain. I've logged it as technical debt for the time being; an important bug that shouldn't go unremenbered. It goes hand
+                in hand with the coolest thing about this fix: A user can log off with a fish on their screen, and a few seconds later, it will still swim right on over to the next user.
+            </p>
+            <p>
+                That's all for this post! A mistake, born from a lack of understanding, logged and fixed with a new understanding in hand. I'll see you next time; we're getting close to PlayFab, but first, I need to address another one of the errors noted from the aforementioned presentation - my
+                database likes going to sleep at the most inconvenient times.
+            </p>
+            <p>
+                <i>- Andrew</i>
+            </p>
+        </div>
+
+        <div class="paddingblock"></div>
+
+        <!--Entry 11-->
+        <div class="about">
+            <h2 class="merriweather" style="text-align: left; padding: 0px 70px;" id="jump10"><u>Solving An Issue - Database Heartbeat</u></h2>
+            <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>10/11/26</i></h4>
+            <p>
+                So, as outlined above, I have a problem. My Azure SQL Database will go offline after about 10 minutes of inactivity. Why is this a problem?
+                <ul>
+                    <li>
+                        It makes demoing the game hard, and difficulty in proving product viability is a bad look.
+                    </li>
+                    <li>
+                        It makes load times long, and for a mobile game, that means engagement is dead in the water.
+                    </li>
+                    <li>
+                        It breaks the game sometimes; a user can successfully log on, and the database can fall asleep due to inactivity, so if a player tries to perform any database-associated action, they'll get the default sleep error thrown back at them.
+                    </li>
+                </ul>
+            </p>
+            <p>
+                I couldn't find any way to create a heartbeat database-side; it seems like the sleep feature is in place as a permanent, immutable cost-saving measure for all parties involved. I applaud this design decision as someone who likes saving money, and have decided to fully circumvent it
+                within my own application. I'll be assigning my server the responsibility of pinging the database to keep it from going back to sleep.
+            </p>
+            <p>
+                The process for this was another one that was purely knowledge-based, using my understanding of my tools to build something new. I wrote a new snippet of PHP code and added two functions to my C# code: One to make the web request to call it, and one to call that one that's inside the
+                FishBus server code. The PHP code, pictured below, is pretty simple; we just try to connect and return a success or failure.
+            </p>
+            <img class="image" src="../images/devlogs/oddquatic/Code1.png" alt="An image of OddQuatic's database heartbeat PHP code." style="width:500px; height:200px">
+            <p>
+                The server calls the function every X (configurable) seconds; I currently have it set to 2 minutes, but I'm leaving a note here and in my personal task tracker that I can safely increase that value in the future. The serve also retains a new SyncVar representing if the database is active
+                or not, and I added a check in every web request function to wait until that variable is true before trying to talk to the database. Requests will no longer be made unless the database is capable of receiving them, eliminating the idle error state!
+            </p>
+            <p>
+                For the first person logging on as soon as the server comes online, there is still a significant wait time, which is why I added a load screen to the login menu. It even has a cute animation that was intended to be a placeholder, but I'm now considering keeping for the full game. It's so
+                cute! As far as this long load time, a production version of this game would have 99% server uptime as well as active users, so it's something I'm hardly worried about.
+            </p>
+            <img class="image" src="../images/devlogs/oddquatic/LoadingAnim.gif" alt="A gif of a fish swimming in a circle, representing progress in loading the game." style="width:200px; height:200px">
+            <p>
+                The heartbeat is still missing an important feature: it should stop when no users are online. The downside of the occasional long boot time is outweighed, at least at the moment, by the savings of not propping the database up 24/7. It's certainly practical as a development safety
+                measure in case a server is accidentally left running overnight. I've noted it in my technical debt list.
+            </p>
+            <p>
+                Otherwise, though, the promised moment is finally at hand - it's time to go online. PlayFab, here I come!
+            </p>
+            <p>
+                <i>- Andrew</i>
+            </p>
         </div>
 
         <div class="paddingblock"></div>
 
         <!--Entry 12-->
         <div class="about">
-            <h2 class="merriweather" style="text-align: left; padding: 0px 70px;" id="jump10"><u>???</u></h2>
-            <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>10/???/26</i></h4>
+            <h2 class="merriweather" style="text-align: left; padding: 0px 70px;" id="jump11"><u>Engineering Process - Setting Up a PlayFab Server</u></h2>
+            <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>10/14/26</i></h4>
+            <p>
+                I feel as though I've been on a great adventure, and now I sit down here to type it up as though I sit with a tome in a stone tower somewhere on the great cliffs of Europe in a storm. Tone establishment aside, this has been a saga.
+                I've worked on it a little bit at different times in the background of these other posts, it hasn't all happened in 3 days' time - but a fair bit did! Let's get to it.
+            </p>
+            <p>
+                In my initial research on where to even begin with connecting Unity to PlayFab, I found a guide by one Prajwal Shetty Vijaykumar on the process. I was stumped almost immediately by the mention of containers and Docker, which I had used
+                briefly in my undergraduate degree for a class but otherwise had only circumstantial exposure to. So, I left for YouTube, and watched a few videos on what containers are all about. Here's a summary of my learnings:
+                <ul>
+                    <li>
+                        A <b>container</b> is a combination of two other principles in software engineering: Namespacing and control groups.
+                    </li>
+                    <li>
+                        <b>Namespacing</b> is the concept of segmenting our hard disk or availible storage so that segments don't have any interaction, isolating resources to allow processes with different needs to function. For example, having different Python
+                        versions in different namespaces to get around a restriction of only being allowed to have 1 Python installation on a machine, so that programs that need different versions can both run.
+                    </li>
+                    <li>
+                        <b>Control groups</b> are limitations on the resources (e.g. memory, network bandwidth) that a particular processes can use. They're useful to prevent resource overconsumption or better manage availible resources between different programs.
+                    </li>
+                    <li>
+                        Containers are meant to be specialized, running one specific task (e.g. a database) and then being networked together to create more robust functionality.
+                    </li>
+                    <li>
+                        The point of <b>Docker</b> is that we can make a container and test it: regardless of what machine the container runs on, it will be safely stowed in its own world, so a hypothetical app is platform-agnostic.
+                    </li>
+                    <li>
+                        An <b>image</b> is a container-in-a-box, or a blueprint for a container; you use an image to spin up a container when you want one to be active.
+                    </li>
+                    <li>
+                        The <b>kernel</b> is the operating system's inbetween; it governs all access between the programs running on the computer and the actual hardware (memory, CPU, disk space).
+                    </li>
+                    <li>
+                        Containers and <b>virtual machines</b> aren't the same thing, even though a container can run its own little OS. Virtual machines need a special kind of in-between called a <b>hypervisor</b> to talk to the host kernel; containers don't and can
+                        talk directly to the kernel!
+                    </li>
+                    <li>
+                        I also needed to install <b>Ubuntu</b> as part of the initial process, so I watched a video on that too; it's a user-friendly Linux distribution, which I need because the headless server I'll be building is for Linux. Linux servers are common
+                        due to the operating system's relative advantages compared to Windows in areas of security, stability, and speed.
+                    </li>
+                </ul>
+            </p>
+            <p>
+                So, after my research, I installed Docker and Ubuntu, as well as the necessary PlayFab SDK for Unity, and set to work. The tutorial I found is the best one I'm aware of (there wasn't anything better, at least), but it's also incomplete in a lot of places, so I needed to fill in the gaps with
+                availible documentation and more of my own research - looking up functions or jumping into the PlayFab SDK source code.
+            </p>
+            <p>
+                One hurdle was understanding what the server and client each needed. Code samples were provided that used the Mirror networking framework, so I took them and worked to translate them into FishNet. The gist of the outlined architecture, and now my current architecture,
+                is that all of your online client/server logic is held under one object. That object contains all of your configuration dials, fields for things like ports and IPs, and by including an enum that lets you specify if your build will be for a local game,
+                online client, or online server, you can very easily swap between all three for testing and development. If you want to make a server build, for example, the object (I've called mine NetworkCEO) will enable the PlayfabServer object beneath it
+                with the necessary server logic and provide it with the information it needs to start the server. Any way you slice it, the CEO will also update the NetworkManager (the center of your chosen networking framework's operations) with the necessary information
+                that it needs.
+            </p>
+            <img class="image" src="../images/devlogs/oddquatic/EngineeringProcessTwo/ServerCode1.png" alt="An image of OddQuatic's database heartbeat PHP code." style="width:500px; height:175px">
+            <p>
+                The server code wasn't too complex in the end; I just needed to follow documentation on how to call the appropriate PlayFab functions to start up the server. The client code was the larger challenge, for a couple of reasons. One was that it needed the region
+                that the server would be showing up in, so I had to do a little sleuthing around for which part of the SDK I needed to import for the proper region enumeration. The other was that to log onto a PlayFab server, a user needs an 'account' - which in practice
+                is just making sure they're represented with a unique user ID. This actually worked out well for me, because my users already have unique IDs! However, the problem was where I was retrieving that user ID...after they connect to the (at the time, local) server.
+                UIDs were ferried over in the data of fish, but I couldn't spawn fish before connecting to the server, because then what would they spawn on?
+            </p>
+            <p>
+                I had just been commenting and refactoring code up to this point, albeit with a lot of involved research, but now was the time for a little more creativity - a refactor. I needed a new PHP script in my web app that just used username to fetch UID, and a Unity method
+                to call that PHP script, and then I needed to integrate that new functionality into a new order of operations. I've made this diagram below to illustrate the full order of my old and new processes.
+            </p>
+            <img class="image" src="../images/devlogs/oddquatic/EngineeringProcessTwo/Diagram1.png" alt="An image of OddQuatic's old and new order of operations for logging a user on and spawning their fish." style="width:1000px; height:600px">
+            <p>
+                Once I tested both methods locally and integrated them, I had another hurdle to getting to the new version outlined above. I needed to query the user ID before the database heartbeat started pumping on the server, because a user needs their UID to connect -
+                but in the current structure, a user would have to connect to get their UID.
+            </p>
+            <p>
+                My solution to this was to remove the heartbeat check from the UID collection function, so that it could be run without a positive response from the heartbeat function, and make the check itself a sort of heartbeat - a timed recursion until a successful
+                result is obtained. Database not awake? No problem - the UID fetch will keep running itself until it works. (As of writing this post, this feature is still in need of a failsafe for if it tries X times and still comes up empty - some kind of value returned
+                to tell the user something is wrong and they need to restart or come back later.) I made the necessary edits, verified that they were functional, and pressed on.
+            </p>
+            <p>
+                With all the necessary pieces, I refactored my login button response coroutine to match the new order of operations and first performed a fully local test to make sure all the moving and shaking hadn't upset anything. It hadn't! I did find an error
+                in my check for ensuring a valid user ID was found and stored locally in the GameManager, which is why we test locally before moving onto my next step - local testing of a dedicated server build. The actual first step of this, making the first Linux server
+                build, went smoothly; as per documentation, I added the ENABLE_PLAYFAB_API flag into my build settings so that relevant server code was enabled, and I had an x86_64 file.
+            </p>
+            <p>
+                PlayFab actually provides a local solution for testing server builds, aptly named LocalMultiplayerAgent. I've linked the documentation below, but the gist of it is that it's an executable that takes a built Docker image and its own MultiplayerSettings.json
+                configuration file to launch a Docker container simulating a PlayFab server. I ran into an issue with this where the setup script I needed to run to create a PlayFab network with Docker wasn't working; running the commands inside manually resolved it. I also
+                needed to manually create a new Docker group within my Ubuntu terminal - I'm not entirely certain what these groups are, but without one for Docker, it was impossible to run any Docker-related commands.
+            </p>
+            <p>
+                I just went and checked, actually. They're mainly for granting or limiting user permissions. Neat.
+            </p>
+            <p>
+                Anyhow, I was able to get the tool up and running along with a Docker container, when I hit my next error - Unity was refusing to communicate with it. I was given an error not unlike "Curl error 35: Cert handshake failed. verify result:
+                UNITYTLS_X509VERIFY_FATAL_ERROR. error state: 7\n","stream":"stdout","time":"2022-05-21T19:40:05.368326753Z"}"; some research led me to a GitHub bug report explaining the matter. Without some updated certifications, Unity considered the server
+                unsafe to communicate with; to correctly install and configue those certifications, I just needed to add a few lines asking as much into my Dockerfile.
+            </p>
+            <p>
+                My final Docker hurdle came in the form of distinguishing between what the correct port and IP were. This was my introduction to the concept of 0.0.0.0 as an IP, as well as the distinction between server and client port, so there was a fair bit of trial and
+                error as I sought a combination of numbers that would establish a connection. Server opens a listening port, client opens a connection with a temporary port, they agree, and all is well - and finally, all was well. I was connected to Docker, and everything
+                was working!
+            </p>
+            <p>
+                With a working facsimile of the real thing, I pressed forward, pushing my image up to my new PlayFab account. Creating the account and requisitioning the free developer resources was actually something I did a while ago, but returning to the interface
+                for creating a build with my new knowledge made it much less confusing. I selected my image, server specs, and port, waited for the ever so slightly annoying yet necessary buffer time PlayFab takes to do most things, and found that my build was, for
+                some reason, "unhealthy." I wasn't able to find any live logging to use, but archived servers provide error logs, so I did just that: archived my server. Then I went to bed, as the wait times were getting to me at this point.
+            </p>
+            <p>
+                In the morning, the dawn brought illumination. I was facing two errors, both relatively simple. One was that in Unity's build settings, I hadn't allowed non-local HTTP communications, so nothing could get in or out of an actual server upload. The
+                other was that when I fixed the first issue, I uploaded a Linux build that I had marked as a client build within Unity. My bad, but a simple (if time-consuming) fix once found. With that, I got my first <i>healthy</i> build, and one of development's most
+                beautiful moments so far: I sent a build to my partner, halfway across my apartment building on a different network, and we watched as each other's fish crossed our screens. I didn't stop there, either; at the demonstration I held today, I invited friends
+                to download a copy of the game themselves, and we watched as fish swam all the way around the room.
+            </p>
+            <p>
+                This marks the first time I can call my backend complete - it still has a lot of important gaps to fill and updates to make, but now, I have a database server and a gameplay server. It's been a fantastic experience learning everything so far, and
+                I'm so excited that I'm planning on starting actual content design tomorrow morning. After all this time...we're gonna customize some modular fish.
+            </p>
+            <p>
+                <i>- Andrew</i>
+            </p>
+            <ul>
+                <li><u><a href="https://prajwalshetty.com/Unity/Deploying-Unity-Game-Server-Into-Playfab-Cloud/" target="_blank">Prajal's Guide To PlayFab and Unity</a></u></li>
+                <li><u><a href="https://www.youtube.com/watch?v=X2hpxp3Kq6A" target="_blank">Containers video</a></u></li>
+                <li><u><a href="https://www.youtube.com/watch?v=_dfLOzuIg2o&t=18s" target="_blank">Docker video</a></u></li>
+                <li><u><a href="https://www.youtube.com/watch?v=zA3vmx0GaO8" target="_blank">Ubuntu video</a></u></li>
+                <li><u><a href="https://github.com/PlayFab/MpsSamples/blob/main/UnityMirror/UnityServer/Assets/Server/Scripts/AgentListener.cs" target="_blank">Server code reference 1</a></u></li>
+                <li><u><a href="https://learn.microsoft.com/en-us/xbox/playfab/multiplayer/servers/mps-unity" target="_blank">Server code reference 2</a></u></li>
+                <li><u><a href="https://learn.microsoft.com/en-us/xbox/playfab/multiplayer/networking/reference/classes/partymanager/methods/partymanager_getregions" target="_blank">PlayFab region documentation</a></u></li>
+                <li><u><a href="https://learn.microsoft.com/en-us/xbox/playfab/multiplayer/servers/localmultiplayeragent/run-container-gameserver#configure-multiplayersettingsjson" target="_blank">LocalMultiplayerAgent documentation</a></u></li>
+                <li><u><a href="https://github.com/PlayFab/LocalMultiplayerAgent/issues/10" target="_blank">LocalMultiplayerAgent PlayFab Network error fix</a></u></li>
+                <li><u><a href="https://www.geeksforgeeks.org/linux-unix/groups-command-in-linux-with-examples/" target="_blank">Linux groups</a></u></li>
+                <li><u><a href="https://github.com/PlayFab/MpsSamples/issues/76" target="_blank">Dockerfile certification fix</a></u></li>
+            </ul>
+        </div>
+
+        <div class="paddingblock"></div>
+
+        <!--Entry 13-->
+        <div class="about">
+            <h2 class="merriweather" style="text-align: left; padding: 0px 70px;" id="jump12"><u><b>Video Log</b>: Designing A Fish Creation System</u></h2>
+            <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>10/28/26</i></h4>
+            <p>
+                For this one, I thought I'd try something different! At this point, all my network architecture is finally in place. I've endured the troubles of setting up connectively with databases and servers alike, and learned so much along the way. Finally, I'm at the point where it's
+                time to give the game its first core piece of content: fish creation.
+            </p>
+            <p>
+                Character creation systems are complex, and especially in my case; there are a host of factors to consider when designing one that needs to live over the network. It's the kind of question I've been asked to live-engineer in interview before...which made me think,
+                why not record the process? That way, I can put a little more of myself out into the world, and all you avid readers out there can put a face and set of vocal cords to yours truly.
+            </p>
+            <p>
+                The following video was recorded by me in about an hour and a half on October 15th. I came in fresh, with really only a few mental notes on how I might go about the problem set, and came away with a fully formed design plan. Take a look!
+            </p>
+            <iframe width="1200" height="650"
+                    src="https://www.youtube.com/embed/bn1R-7nUBiQ?si=lnX9MEATkF5_4B1N" allowfullscreen>
+            </iframe>
+            <p>
+                For those of you who don't have the time to watch a direct to television movie's worth of my design process, these are the highlights:
+                <ul>
+                    <li>
+                        I'll be using a system of Points. Points are objects that have a position and connection type, and will be placed on each fish part prefab. Fish bodies will have multiple points, while other parts will have one; that way,
+                        all you need to do as a designer to configure a part is set up its sprite and place a Point with its type set to that part (e.g. Tail), and I can write a script to match the positions of like-typed points, creating a fish.
+                    </li>
+                    <li>
+                        Fish parts and colors will be named and stored via integer index. This will make database storage simple, reduce the amount of data I'm sending across my servers, and allow me to load parts in game without using long strings.
+                    </li>
+                    <li>
+                        A big focus on my discussion was the tension between programmatic functionality and designer ease of use; I'd like to develop a few editor or auto-configuration tools in the future to fight back against what will eventually become easy-to-miss configuration
+                        errors in a sea of numerically named pieces.
+                    </li>
+                    <li>
+                        One of my favorite ah-hah moments in this whole thing is when I'm trying to solve and optimize my code for actually building the fish, because I was stuck in a lot of double-for-loop list iteration that just didn't feel right; I realize that so long as I have sorted lists
+                        of a fish's body and non-body points, I can build the fish in a single runthrough of one list. This was important to me, as when doing the math on how many fish need to be spawned in an average intended play session at scale, the numbers get big
+                        very very quickly.
+                    </li>
+                </ul>
+            </p>
+            <p>
+                This system then took me about 2 weeks to take from design plan to fully realized in-game feature. (Not two work weeks, mind you; in total, the process was about 20 hours. Other uses of my time currently include applying to jobs, writing this blog, preparing
+                in-person presentations about this project for my peers, working on a UE5 project with a small team, and thwarting evil wherever I find it. I am, after all, the terror that flaps in the night, the alignment error you find in your memory debugger view, and the one true identity
+                of Darkwing Duck.)
+            </p>
+            <p>
+                Here are some captioned screenshots of the end result of the process!
+            </p>
+            <p>
+                <img class="image" src="../images/devlogs/oddquatic/FishCreation/fishCreation1.png" alt="An image of a fin prefab." style="width:800px; height:400px">
+
+                This is an editor screenshot of one of my parts. Its Point is currently invisible, but it's placed at the top pixel of the fin as the parent of the sprite object, so when the Point is positioned, the sprite follows.
+            </p>
+            <p>
+                <img class="image" src="../images/devlogs/oddquatic/FishCreation/fishCreation2.png" alt="An image of OddQuatic's old software architecture." style="width:1100px; height:300px">
+
+                This is a picture of a FishColor's inspector fields. I created a ScriptableObject base for colors so that all you need to do to make a new one is right click in the editor and select the object, customize its fields, and give it a name! Content-oriented design and programming at work.
+            </p>
+            <p>
+                <img class="image" src="../images/devlogs/oddquatic/FishCreation/fishCreation3.png" alt="An image of OddQuatic's first fish creation UI." style="width:1200px; height:600px">
+
+                And here is the in-game creation interface! It's very functional and less formal right now; clicking on a part button swaps the part, and clicking on a color swatch colors the last part you swapped. The color buttons are loaded in dynamically, adding to the effectiveness of my
+                content driven color system; I still need to add a simialr system for fish parts to make it a little more usable. You can see some fish that I've made swimming in the background!
+            </p>
+            <p>
+                It was a lot of fun (and a LOT of refactoring parameters) to bring this first core system into the light, and I'm so happy with the initial results. My next steps will be a little lighter on the design side of things; my graduate program has a project playtest date coming up, and I have a fair
+                few bugs, inefficiences, and quality of life features I'd like to fix / tidy / implement before then. I'll return with a list and a report on how the playtest went - <b>sea</b> you then!
+            </p>
+            <p>
+                <i>- Andrew</i>
+            </p>
+        </div>
+
+        <div class="paddingblock"></div>
+
+        <!--Entry 14-->
+<!--        <div class="about">
+            <h2 class="merriweather" style="text-align: left; padding: 0px 70px;" id="jump13"><u>Public Playtest #1</u></h2>
+            <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>11/10/26</i></h4>
+            <p>
+                Hark! For a playtest was conducted, and despite a variety of morning-of technical difficulties, went over very well.
+            </p>
+            <p>
+                In my last post, I promised a list of fixes and tweaks, and right on schedule, here it is:
+                <ul>
+                    <li>
+                        Since fish colors are now split between parts in their own storage fields, I elimiated the "FishColor" field from my database that previously held the master value. It's no longer stored, transmitted, or passed around anywhere in code.
+                    </li>
+                    <li>
+                        Users with no fish would previously get an error when logging in as the game tried to spawn fish from an empty file. This has been caught, and the game no longer tries to read empty or null files, returning early out of the relevant function when it encounters one.
+                    </li>
+                    <li>
+                        The Y position of fish is now preserved when they travel from screen to screen. It was previously randomized, as I just stopped passing the value for a little bit when converting over to full server authority.
+                    </li>
+                    <li>
+                        When retrieving a user's fish, logic for first checking their username to find (or grant) their user ID was left over from before my PlayFab refactor. Since spinning off the UID logic into its own query, that section hasn't been required in the fish query, so I removed it
+                        and verified everything was the same.
+                    </li>
+                    <li>
+                        When switching to full server authority, I noted that I still didn't perfrom any disconnect procedures for active users. Using FishNet's ClientID field, I added a periodic check for fish spawned by users with a certain ClientID, and when that ID is no longer present in the list
+                        of connected players, the server will now remove all associated fish. (<i>I checked; FishNet ClientIDs are cumulative, so an integer-overflow amount of users would have to be online simultaneously for a repeat to occur and cause a bug. This has been deemed sufficiently unlikely.</i>)
+                    </li>
+                    <li>
+                        The user interface of fish creation has been notably improved with runtime-spawned buttons for each type of fish part that the user has access to. Now, rather than cycling parts, users can select them from a menu left of the fish display. See picture below!
+                    </li>
+                </ul>
+            </p>
+            <p>
+                I have a less impressive, but perhaps equally impactful, list of bugs that marred preparations for this playtest:
+                <ul>
+                    <li>
+                        Fish have stopped cycling between users on all platforms. They now accumulate under one user even if they spawn on another, so one person becomes the Fish Master.
+                    </li>
+                    <li>
+                        Android devices are incompatible with server-side PlayFab code. Luckily, this is a common problem with a Microsoft-recommended solution (#ifdef around relevant code), and Android devices still work just fine as PlayFab clients.
+                    </li>
+                    <li>
+                        Any form of non-localhost server now experiences connection issues. Despite all ports and IPs being correct, I was only able to scucessfully connect to my server for about an hour yesterday before all builds experienced consistent and hard-to-breach connection failures.
+                    </li>
+                </ul>
+            </p>
+            <p>
+                What this means for the future is that I have my week's work cut out for me, especially with the last point. I'll be reviewing what's changed since the initial success of dedicated server testing, which stood up to a roomful of people all simultaneously logged on at once without
+                breaking a sweat, and hopefully learn a thing or two about the debugging process for PlayFab that I didn't know before.
+            </p>
+            <p>
+
+            </p>
+        </div>
+
+        <div class="paddingblock"></div>-->
+
+        <!--Entry 15-->
+<!--        <div class="about">
+            <h2 class="merriweather" style="text-align: left; padding: 0px 70px;" id="jump14"><u>???</u></h2>
+            <h4 class="merriweather" style="text-align: left; padding: 0px 70px;"><i>11/??/26</i></h4>
             <p>
                 Coming soon-ish!
             </p>
-        </div>
+        </div>-->
 
         <div class="paddingblock"></div>
 
